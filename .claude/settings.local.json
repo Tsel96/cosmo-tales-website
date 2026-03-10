@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__paper__get_basic_info",
+      "mcp__paper__get_tree_summary",
+      "mcp__paper__get_screenshot"
+    ]
+  }
+}

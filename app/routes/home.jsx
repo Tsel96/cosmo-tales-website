@@ -413,7 +413,7 @@ function Features() {
       </h2>
       <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
         {FEATURES.map((f, i) => (
-          <FeatureCard key={f.title} {...f} reverse={false} />
+          <FeatureCard key={f.title} {...f} reverse={true} />
         ))}
       </div>
     </section>

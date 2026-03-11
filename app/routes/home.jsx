@@ -8,7 +8,7 @@ function useFadeIn(staggerMs = 100) {
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-    const children = el.querySelectorAll('.fade-in-up')
+    const children = el.querySelectorAll(':scope > .fade-in-up')
     if (!children.length) return
 
     const observer = new IntersectionObserver(
@@ -20,13 +20,37 @@ function useFadeIn(staggerMs = 100) {
           observer.disconnect()
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.35 }
     )
     observer.observe(el)
     return () => observer.disconnect()
   }, [staggerMs])
 
   return containerRef
+}
+
+/* ─── Per-element scroll reveal (for large items like feature cards) ─── */
+function useFadeInItem() {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('visible')
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.25 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return ref
 }
 
 /* ─── Route meta ─── */
@@ -324,6 +348,7 @@ const FEATURES = [
 ]
 
 function FeatureCard({ video, title, desc, reverse }) {
+  const cardRef = useFadeInItem()
   const tiltRef = useRef(null)
   const canHover = typeof window !== 'undefined' && window.matchMedia?.('(hover: hover)').matches
 
@@ -347,7 +372,7 @@ function FeatureCard({ video, title, desc, reverse }) {
   }
 
   return (
-    <div className={`flex flex-col md:flex-row md:items-center w-full max-w-[1200px] gap-4 md:gap-12 ${reverse ? 'md:flex-row-reverse' : ''}`}>
+    <div ref={cardRef} className={`fade-in-up flex flex-col md:flex-row md:items-center w-full max-w-[1200px] gap-4 md:gap-12 ${reverse ? 'md:flex-row-reverse' : ''}`}>
       {/* Video — trigger parent stays flat, child tilts (Rule #1: anti-flicker) */}
       <div
         className="relative w-full md:flex-[3] min-w-0"
@@ -393,7 +418,7 @@ function Features() {
       <h2 className="fade-in-up font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         What Awaits You
       </h2>
-      <div className="fade-in-up flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
+      <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
         {FEATURES.map((f, i) => (
           <FeatureCard key={f.title} {...f} reverse={false} />
         ))}
@@ -530,7 +555,7 @@ function EmailSignup() {
       {status === 'error' && (
         <p className="text-red-400 text-sm mt-2">{message}</p>
       )}
-      <p className="text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1">
+      <p className="fade-in-up text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1">
         We'll only use your email to notify you about Cosmo Tales.{' '}
         <a href="/privacy" className="underline hover:text-white/40 transition-colors">Privacy Policy</a>
       </p>

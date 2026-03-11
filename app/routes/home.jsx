@@ -53,7 +53,7 @@ export function meta() {
 const ASSETS = 'https://workers.paper.design/file-assets/01KJPX5MQYW5WMXDR20PGMHFVR/'
 const LOGO_URL = ASSETS + '4R6PV7795HJ9QW1QEYBDPBKEGQ.png'
 const SHIP_URL = ASSETS + '16BDY4JWN7S32GW0Y4J5X4YC1D.png'
-const HERO_BG_URL = ASSETS + '01KJSFWQAQX569HESRCAW2X45V.png'
+const HERO_BG_URL = '/hero-bg-hd.webp'
 const DOTS_BG_URL = ASSETS + '01KJSFYAV9RN9H2920NNRVPS26.png'
 const STEAM_ICON_URL = ASSETS + '01KJSGM5CCA1ZVHYDWH64816GQ.png'
 // 1x1 white pixel for ambient glow heatmap (no visible image pattern)

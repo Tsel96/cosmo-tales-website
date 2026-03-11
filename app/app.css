@@ -38,11 +38,12 @@
 
 /* ─── Input focus glow ring ─── */
 .input-glow {
-  transition: border-color 200ms var(--ease-spring), box-shadow 200ms var(--ease-spring), background-color 200ms var(--ease-spring);
+  transition: box-shadow 200ms var(--ease-spring), background-color 200ms var(--ease-spring);
 }
 .input-glow:focus {
   background-color: rgba(255, 255, 255, 0.08);
   box-shadow:
+    inset 0 0 0 1px rgba(77, 201, 246, 0.4),
     0 0 0 3px rgba(77, 201, 246, 0.15),
     0 0 24px rgba(77, 201, 246, 0.06);
 }
@@ -55,6 +56,23 @@
   .video-mask-wrap:hover video {
     transform: scale(1.05);
   }
+}
+
+/* ─── Subtle inset outline on images for depth (principle #11) ─── */
+.img-outline {
+  outline: 1px solid rgba(255, 255, 255, 0.08);
+  outline-offset: -1px;
+}
+
+/* ─── Scroll-triggered entrance animations ─── */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms var(--ease-out-expo), transform 600ms var(--ease-out-expo);
+}
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ─── Link underline reveal (desktop only) ─── */
@@ -91,5 +109,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: 'ss07' on, 'ss08' on, 'cv01' on, 'cv03' on, 'cv04' on, 'cv05' on, 'cv08' on, 'cv09' on, 'cv10' on;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
 }

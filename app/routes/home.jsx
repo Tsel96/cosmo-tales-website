@@ -1,5 +1,33 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { HalftoneCmyk, HalftoneDots, PulsingBorder, Heatmap } from '@paper-design/shaders-react'
+
+/* ─── Scroll-triggered staggered reveal hook ─── */
+function useFadeIn(staggerMs = 100) {
+  const containerRef = useRef(null)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const children = el.querySelectorAll('.fade-in-up')
+    if (!children.length) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          children.forEach((child, i) => {
+            setTimeout(() => child.classList.add('visible'), i * staggerMs)
+          })
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [staggerMs])
+
+  return containerRef
+}
 
 /* ─── Route meta ─── */
 export function meta() {
@@ -211,7 +239,7 @@ function Hero() {
 /* Steam icon circle */
 function HeatmapSteamIcon() {
   return (
-    <span className="relative w-[38px] h-[38px] rounded-full overflow-hidden flex items-center justify-center shrink-0 bg-white/10">
+    <span className="relative w-[38px] h-[38px] rounded-full overflow-hidden flex items-center justify-center shrink-0 bg-white/10 img-outline">
       <img src={STEAM_ICON_URL} alt="" className="w-full h-full object-cover" style={{ filter: 'brightness(0) invert(1)' }} />
     </span>
   )
@@ -257,13 +285,14 @@ function SteamWishlistButton() {
    STORY SECTION
    ═══════════════════════════════════════════ */
 function Story() {
+  const ref = useFadeIn(120)
   return (
-    <section className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4">
-      <EyebrowLabel>The Story</EyebrowLabel>
-      <h2 className="font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]">
+    <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4">
+      <span className="fade-in-up"><EyebrowLabel>The Story</EyebrowLabel></span>
+      <h2 className="fade-in-up font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]">
         Cars in Space?!
       </h2>
-      <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] text-center max-w-[560px] pt-1">
+      <p className="fade-in-up text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] text-center max-w-[560px] pt-1">
         Buckle up, hit the gas and switch between dimensions in a totally
         fresh space adventure full of wit and emotional stories. Each sector
         is a standalone comic episode with characters, conflicts and
@@ -328,6 +357,7 @@ function FeatureCard({ video, title, desc, reverse }) {
         <div
           ref={tiltRef}
           className="video-mask-wrap"
+          style={{ filter: 'drop-shadow(0 0 0.5px rgba(255,255,255,0.15)) drop-shadow(0 0 0.5px rgba(255,255,255,0.15))' }}
         >
           <div
             className="w-full overflow-hidden"
@@ -356,15 +386,16 @@ function FeatureCard({ video, title, desc, reverse }) {
 }
 
 function Features() {
+  const ref = useFadeIn(120)
   return (
-    <section className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4">
-      <EyebrowLabel>Features</EyebrowLabel>
-      <h2 className="font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
+    <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4">
+      <span className="fade-in-up"><EyebrowLabel>Features</EyebrowLabel></span>
+      <h2 className="fade-in-up font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         What Awaits You
       </h2>
-      <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
+      <div className="fade-in-up flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
         {FEATURES.map((f, i) => (
-          <FeatureCard key={f.title} {...f} reverse={i % 2 === 1} />
+          <FeatureCard key={f.title} {...f} reverse={false} />
         ))}
       </div>
     </section>
@@ -375,13 +406,14 @@ function Features() {
    TRAILER SECTION
    ═══════════════════════════════════════════ */
 function Trailer() {
+  const ref = useFadeIn(120)
   return (
-    <section className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4">
-      <EyebrowLabel>Trailer</EyebrowLabel>
-      <h2 className="font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
+    <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4">
+      <span className="fade-in-up"><EyebrowLabel>Trailer</EyebrowLabel></span>
+      <h2 className="fade-in-up font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         Watch the Trailer
       </h2>
-      <div className="w-full max-w-[1080px] pt-6 md:pt-12">
+      <div className="fade-in-up w-full max-w-[1080px] pt-6 md:pt-12">
         {/* filter wrapper — drop-shadow respects clip-path shape for outline + glow */}
         <div style={{
           filter: [
@@ -413,6 +445,7 @@ function Trailer() {
    EMAIL SIGNUP SECTION
    ═══════════════════════════════════════════ */
 function EmailSignup() {
+  const fadeRef = useFadeIn(120)
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [message, setMessage] = useState('')
@@ -442,26 +475,27 @@ function EmailSignup() {
   }
 
   return (
-    <section className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate">
-      <EyebrowLabel>Stay in the Loop</EyebrowLabel>
-      <h2 className="font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center">
+    <section ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate">
+      <span className="fade-in-up"><EyebrowLabel>Stay in the Loop</EyebrowLabel></span>
+      <h2 className="fade-in-up font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         Get Notified at Launch
       </h2>
-      <p className="text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1">
+      <p className="fade-in-up text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1">
         Drop your email and be the first to know when the adventure begins.
       </p>
 
       {status === 'success' ? (
-        <p className="text-accent text-base mt-6 font-medium">{message}</p>
+        <p className="fade-in-up text-accent text-base mt-6 font-medium">{message}</p>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center mt-8 gap-3 w-full md:w-auto">
+        <form onSubmit={handleSubmit} className="fade-in-up flex flex-col md:flex-row items-center mt-8 gap-3 w-full md:w-auto">
           <input
             type="email"
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] border border-white/[0.08] text-white placeholder:text-[#8A95B0] text-base focus:outline-none focus:border-accent/40 input-glow"
+            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] text-white placeholder:text-[#8A95B0] text-base focus:outline-none input-glow"
+            style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08), 0 1px 2px 0 rgba(0,0,0,0.2)' }}
           />
           <button
             type="submit"
@@ -508,17 +542,18 @@ function EmailSignup() {
    STEAM WISHLIST SECTION
    ═══════════════════════════════════════════ */
 function CtaSection() {
+  const ref = useFadeIn(120)
   return (
-    <section className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate">
-      <EyebrowLabel>Coming Soon</EyebrowLabel>
-      <h2 className="font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center">
+    <section ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate">
+      <span className="fade-in-up"><EyebrowLabel>Coming Soon</EyebrowLabel></span>
+      <h2 className="fade-in-up font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         Ready to Launch?
       </h2>
-      <p className="text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1">
+      <p className="fade-in-up text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1">
         Add Cosmo Tales to your Steam wishlist and be the first to
         know when the adventure begins.
       </p>
-      <div className="mt-6">
+      <div className="fade-in-up mt-6">
         <SteamWishlistButton />
       </div>
     </section>
@@ -530,7 +565,7 @@ function CtaSection() {
    ═══════════════════════════════════════════ */
 function Footer() {
   return (
-    <footer className="flex flex-col items-center w-full px-5 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 gap-5 md:gap-6 border-t border-white/[0.06]">
+    <footer className="flex flex-col items-center w-full px-5 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 gap-5 md:gap-6" style={{ boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.06), inset 0 1px 4px 0 rgba(0,0,0,0.15)' }}>
       {/* Nav links row */}
       <div className="flex gap-5 md:gap-7 self-start">
         {[

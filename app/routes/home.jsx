@@ -93,7 +93,7 @@ function Hero() {
   const fgCurrent    = useRef({ x: 0, y: 0 })
   const [bg, setBg]  = useState({ x: 0, y: 0 })
   const [fg, setFg]  = useState({ x: 0, y: 0 })
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   useEffect(() => {
     let raf
@@ -130,16 +130,6 @@ function Hero() {
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseleave', onLeave)
     }
-  }, [])
-
-  useEffect(() => {
-    const update = () => {
-      if (typeof window === 'undefined') return
-      setIsMobile(window.innerWidth < 768)
-    }
-    update()
-    window.addEventListener('resize', update)
-    return () => window.removeEventListener('resize', update)
   }, [])
 
   return (
@@ -412,7 +402,7 @@ function Features() {
         <SplitWords staggerStart={1}>What Awaits You</SplitWords>
       </h2>
       <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
-        {FEATURES.map((f, i) => (
+        {FEATURES.map((f) => (
           <FeatureCard key={f.title} {...f} reverse={true} />
         ))}
       </div>

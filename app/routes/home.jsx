@@ -547,7 +547,7 @@ function EmailSignup() {
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
         We'll only use your email to notify you about Cosmo Tales.{' '}
-        <a href="/privacy" className="underline visited:text-[var(--color-visited)] hover:text-white/40 transition-colors">Privacy Policy</a>
+        <a href="/privacy" className="text-white visited:text-[var(--color-visited)] transition-colors link-reveal">Privacy Policy</a>
       </p>
     </section>
   )

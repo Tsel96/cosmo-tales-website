@@ -93,7 +93,7 @@ function Hero() {
   const fgCurrent    = useRef({ x: 0, y: 0 })
   const [bg, setBg]  = useState({ x: 0, y: 0 })
   const [fg, setFg]  = useState({ x: 0, y: 0 })
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+  const isMobile = window.innerWidth < 768
 
   useEffect(() => {
     let raf
@@ -110,7 +110,6 @@ function Hero() {
     raf = requestAnimationFrame(tick)
 
     const onMove = (e) => {
-      if (!heroRef.current) return
       const rect = heroRef.current.getBoundingClientRect()
       // Normalize to -1 … +1 around center
       const nx = ((e.clientX - rect.left) / rect.width  - 0.5) * 2
@@ -330,12 +329,11 @@ const FEATURES = [
 function FeatureCard({ video, title, desc, reverse }) {
   const cardRef = useReveal(0.25)
   const tiltRef = useRef(null)
-  const canHover = typeof window !== 'undefined' && window.matchMedia?.('(hover: hover)').matches
+  const canHover = window.matchMedia('(hover: hover)').matches
 
   const handleMouseMove = (e) => {
     if (!canHover) return
     const el = tiltRef.current
-    if (!el) return
     const rect = el.getBoundingClientRect()
     const nx = (e.clientX - rect.left) / rect.width - 0.5
     const ny = (e.clientY - rect.top) / rect.height - 0.5
@@ -346,7 +344,6 @@ function FeatureCard({ video, title, desc, reverse }) {
   const handleMouseLeave = () => {
     if (!canHover) return
     const el = tiltRef.current
-    if (!el) return
     el.style.transition = 'transform 280ms cubic-bezier(0.22, 1, 0.36, 1)'
     el.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)'
   }
@@ -619,7 +616,6 @@ function StarField() {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
     const ctx = canvas.getContext('2d')
     const stars = []
     const meteors = []
@@ -695,7 +691,7 @@ function StarField() {
 
         ctx.beginPath()
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
-        ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 97%, ${Math.min(1, Math.max(0, alpha))})`
+        ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 97%, ${Math.min(1, alpha)})`
         ctx.fill()
       }
       // ─── Meteor spawning ───

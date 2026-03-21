@@ -9,7 +9,6 @@ function useReveal(threshold = 0.35) {
     const el = ref.current
     if (!el) return
     const targets = el.querySelectorAll('.animate-enter')
-    if (!targets.length) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -93,7 +92,14 @@ function Hero() {
   const fgCurrent    = useRef({ x: 0, y: 0 })
   const [bg, setBg]  = useState({ x: 0, y: 0 })
   const [fg, setFg]  = useState({ x: 0, y: 0 })
-  const isMobile = window.innerWidth < 768
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 767px)').matches)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const onChange = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
 
   useEffect(() => {
     let raf
@@ -541,7 +547,7 @@ function EmailSignup() {
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
         We'll only use your email to notify you about Cosmo Tales.{' '}
-        <a href="/privacy" className="underline hover:text-white/40 transition-colors">Privacy Policy</a>
+        <a href="/privacy" className="underline visited:text-[var(--color-visited)] hover:text-white/40 transition-colors">Privacy Policy</a>
       </p>
     </section>
   )
@@ -591,7 +597,7 @@ function Footer() {
             href={href}
             target={href.startsWith('http') ? '_blank' : undefined}
             rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            className="text-[13px] leading-4 text-[#8A95B0] hover:text-white transition-colors link-reveal"
+            className="text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
           >
             {label}
           </a>

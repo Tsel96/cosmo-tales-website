@@ -597,7 +597,7 @@ function Footer() {
             href={href}
             target={href.startsWith('http') ? '_blank' : undefined}
             rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            className="text-[13px] leading-4 text-[#8A95B0] visited:text-[var(--color-visited)] hover:text-white transition-colors link-reveal"
+            className="text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
           >
             {label}
           </a>

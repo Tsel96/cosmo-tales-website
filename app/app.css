@@ -8,6 +8,7 @@
   --color-space-900: #050A1A;
   --color-space-800: #0A1128;
   --color-accent: #4DC9F6;
+  --color-visited: #9083C4;
 }
 
 @keyframes levitate {
@@ -116,6 +117,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: 'ss07' on, 'ss08' on, 'cv01' on, 'cv03' on, 'cv04' on, 'cv05' on, 'cv08' on, 'cv09' on, 'cv10' on;
+  }
+  a:visited {
+    color: var(--color-visited);
   }
   h1, h2, h3 {
     text-wrap: balance;

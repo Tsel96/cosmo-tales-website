@@ -547,7 +547,7 @@ function EmailSignup() {
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
         We'll only use your email to notify you about Cosmo Tales.{' '}
-        <a href="/privacy" className="underline hover:text-white/40 transition-colors">Privacy Policy</a>
+        <a href="/privacy" className="underline visited:text-[var(--color-visited)] hover:text-white/40 transition-colors">Privacy Policy</a>
       </p>
     </section>
   )
@@ -597,7 +597,7 @@ function Footer() {
             href={href}
             target={href.startsWith('http') ? '_blank' : undefined}
             rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            className="text-[13px] leading-4 text-[#8A95B0] hover:text-white transition-colors link-reveal"
+            className="text-[13px] leading-4 text-[#8A95B0] visited:text-[var(--color-visited)] hover:text-white transition-colors link-reveal"
           >
             {label}
           </a>

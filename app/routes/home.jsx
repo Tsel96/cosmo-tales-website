@@ -9,7 +9,6 @@ function useReveal(threshold = 0.35) {
     const el = ref.current
     if (!el) return
     const targets = el.querySelectorAll('.animate-enter')
-    if (!targets.length) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -93,7 +92,14 @@ function Hero() {
   const fgCurrent    = useRef({ x: 0, y: 0 })
   const [bg, setBg]  = useState({ x: 0, y: 0 })
   const [fg, setFg]  = useState({ x: 0, y: 0 })
-  const isMobile = window.innerWidth < 768
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 767px)').matches)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const onChange = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
 
   useEffect(() => {
     let raf

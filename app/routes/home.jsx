@@ -586,7 +586,7 @@ function Footer() {
         </div>
         <button
           onClick={() => setLang(lang === 'cs' ? 'en' : 'cs')}
-          className="text-[13px] leading-4 text-white/40 hover:text-white transition-colors cursor-pointer md:ml-auto"
+          className="text-[13px] leading-4 text-white transition-colors cursor-pointer link-reveal md:ml-auto"
         >
           {t.langSwitch}
         </button>

@@ -109,37 +109,31 @@ const translations = {
   },
 }
 
+const getCookie = (name) => {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+  return match ? match[2] : null
+}
+
 const LangContext = createContext()
 
 export function LangProvider({ children }) {
   const [lang, setLangState] = useState(() => {
     if (typeof window === 'undefined') return 'en'
+    // 1. Manual choice saved by the user
     const saved = localStorage.getItem('lang')
     if (saved === 'cs' || saved === 'en') return saved
-    // Auto-detect from browser language
-    const browserLang = navigator.language || ''
-    if (browserLang.startsWith('cs')) return 'cs'
+    // 2. Cookie set synchronously by Edge Middleware before the HTML was served
+    const geo = getCookie('_detected_lang')
+    if (geo === 'cs' || geo === 'en') return geo
+    // 3. Browser language fallback
+    if ((navigator.language || '').startsWith('cs')) return 'cs'
     return 'en'
   })
-
-  // On first visit (no saved preference), check Vercel geo header via API
-  useEffect(() => {
-    if (localStorage.getItem('lang')) return // user already chose
-    fetch('/api/geo')
-      .then((r) => r.json())
-      .then(({ country }) => {
-        if (country === 'CZ') {
-          setLangState('cs')
-        }
-      })
-      .catch(() => {}) // silently ignore — browser language is the fallback
-  }, [])
 
   useEffect(() => {
     document.documentElement.lang = lang
   }, [lang])
 
-  // Update page title when language changes
   useEffect(() => {
     document.title = translations[lang].metaTitle
   }, [lang])
@@ -147,6 +141,8 @@ export function LangProvider({ children }) {
   const setLang = (l) => {
     setLangState(l)
     localStorage.setItem('lang', l)
+    // Persist as a cookie too so middleware won't override the manual choice
+    document.cookie = `lang=${l}; path=/; max-age=31536000; SameSite=Lax`
   }
 
   const t = translations[lang]

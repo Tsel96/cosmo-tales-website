@@ -12,10 +12,11 @@
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.71",
     "@react-router/node": "^7.6.1",
+    "agentation": "^2.3.3",
+    "isbot": "^5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router": "^7.6.1",
-    "isbot": "^5"
+    "react-router": "^7.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

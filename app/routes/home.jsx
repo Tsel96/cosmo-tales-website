@@ -209,7 +209,7 @@ function Hero() {
 
       {/* Hero Text + CTA grouped together */}
       <div className="absolute bottom-[10vh] md:bottom-[12vh] left-0 right-0 flex flex-col items-center gap-6 md:gap-9 z-[15] px-5">
-        <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px]">
+        <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
           Journey Beyond<br />the Stars
         </h1>
         <SteamWishlistButton />
@@ -522,7 +522,7 @@ function EmailSignup() {
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
         We'll only use your email to notify you about Cosmo Tales.{' '}
-        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">Privacy Policy<ExternalLinkIcon className="w-2.5 h-2.5 opacity-60" /></a>
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">Privacy Policy<ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" /></a>
       </p>
     </section>
   )
@@ -574,7 +574,7 @@ function Footer() {
             rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
             className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
           >
-            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-2.5 h-2.5 opacity-60" />}
+            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" />}
           </a>
         ))}
       </div>

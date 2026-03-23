@@ -119,8 +119,8 @@ function Hero() {
       // Normalize to -1 … +1 around center
       const nx = ((e.clientX - rect.left) / rect.width  - 0.5) * 2
       const ny = ((e.clientY - rect.top)  / rect.height - 0.5) * 2
-      bgTarget.current = { x: nx * -14, y: ny * -9  }   // counter-moves (deep)
-      fgTarget.current = { x: nx *  10, y: ny *  7  }   // co-moves (close)
+      bgTarget.current = { x: nx * -28, y: ny * -18 }   // counter-moves (deep)
+      fgTarget.current = { x: nx *  22, y: ny *  16 }   // co-moves (close)
     }
     const onLeave = () => {
       bgTarget.current = { x: 0, y: 0 }

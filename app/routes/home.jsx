@@ -372,7 +372,7 @@ function Features() {
       </p>
       <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
         {FEATURES.map((f) => (
-          <FeatureCard key={f.title} {...f} reverse={true} />
+          <FeatureCard key={f.title} {...f} reverse={f.title !== 'Space Combat'} />
         ))}
       </div>
     </section>
@@ -513,7 +513,7 @@ function EmailSignup() {
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
         We'll only use your email to notify you about Cosmo Tales.{' '}
-        <a href="/privacy" className="text-white visited:text-[var(--color-visited)] transition-colors link-reveal">Privacy Policy</a>
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-white visited:text-[var(--color-visited)] transition-colors link-reveal">Privacy Policy</a>
       </p>
     </section>
   )
@@ -556,13 +556,13 @@ function Footer() {
           { label: 'X / Twitter', href: 'https://x.com/CosmoTalesGame' },
           { label: 'Facebook', href: 'https://www.facebook.com/cosmotalesgame' },
           { label: 'Instagram', href: 'https://www.instagram.com/cosmotalesgame/' },
-          { label: 'Privacy Policy', href: '/privacy' },
-        ].map(({ label, href }) => (
+          { label: 'Privacy Policy', href: '/privacy', newTab: true },
+        ].map(({ label, href, newTab }) => (
           <a
             key={label}
             href={href}
-            target={href.startsWith('http') ? '_blank' : undefined}
-            rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            target={href.startsWith('http') || newTab ? '_blank' : undefined}
+            rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
             className="text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
           >
             {label}

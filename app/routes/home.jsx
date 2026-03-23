@@ -67,17 +67,6 @@ function SteamIcon({ className = 'w-5 h-5' }) {
   )
 }
 
-/* ─── Section Label ─── */
-function EyebrowLabel({ children }) {
-  return (
-    <span
-      className="font-eyebrow text-xs font-semibold tracking-[0.2em] uppercase text-accent"
-      style={{ fontVariationSettings: "'CNST' 24, 'wght' 649" }}
-    >
-      {children}
-    </span>
-  )
-}
 
 /* ═══════════════════════════════════════════
    HERO SECTION
@@ -272,12 +261,12 @@ function Story() {
   const ref = useReveal()
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <span className="animate-enter" style={{ '--stagger': 0 }}>
-        <EyebrowLabel>The Story</EyebrowLabel>
-      </span>
-      <h2 className="font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]">
-        <SplitWords staggerStart={1}>Cars in Space?!</SplitWords>
+      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 0 }}>
+        The Story
       </h2>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center max-w-[640px]">
+        <SplitWords staggerStart={1}>Cars in Space?!</SplitWords>
+      </p>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
         Buckle up, hit the gas and switch between dimensions in a totally
         fresh space adventure full of wit and emotional stories. Each sector
@@ -375,12 +364,12 @@ function Features() {
   const ref = useReveal()
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <span className="animate-enter" style={{ '--stagger': 0 }}>
-        <EyebrowLabel>Features</EyebrowLabel>
-      </span>
-      <h2 className="font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
-        <SplitWords staggerStart={1}>What Awaits You</SplitWords>
+      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 0 }}>
+        Features
       </h2>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+        <SplitWords staggerStart={1}>What Awaits You</SplitWords>
+      </p>
       <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
         {FEATURES.map((f) => (
           <FeatureCard key={f.title} {...f} reverse={true} />
@@ -397,12 +386,12 @@ function Trailer() {
   const ref = useReveal()
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <span className="animate-enter" style={{ '--stagger': 0 }}>
-        <EyebrowLabel>Trailer</EyebrowLabel>
-      </span>
-      <h2 className="font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
-        <SplitWords staggerStart={1}>Watch the Trailer</SplitWords>
+      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 0 }}>
+        Trailer
       </h2>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+        <SplitWords staggerStart={1}>Watch the Trailer</SplitWords>
+      </p>
       <div className="animate-enter w-full max-w-[1080px] pt-6 md:pt-12" style={{ '--stagger': 4 }}>
         {/* filter wrapper — drop-shadow respects clip-path shape for outline + glow */}
         <div style={{
@@ -466,12 +455,12 @@ function EmailSignup() {
 
   return (
     <section ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
-      <span className="animate-enter" style={{ '--stagger': 0 }}>
-        <EyebrowLabel>Stay in the Loop</EyebrowLabel>
-      </span>
-      <h2 className="font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center">
-        <SplitWords staggerStart={1}>Get Notified at Launch</SplitWords>
+      <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 0 }}>
+        Stay in the Loop
       </h2>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+        <SplitWords staggerStart={1}>Get Notified at Launch</SplitWords>
+      </p>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
         Drop your email and be the first to know when the adventure begins.
       </p>
@@ -537,12 +526,12 @@ function CtaSection() {
   const ref = useReveal()
   return (
     <section ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
-      <span className="animate-enter" style={{ '--stagger': 0 }}>
-        <EyebrowLabel>Coming Soon</EyebrowLabel>
-      </span>
-      <h2 className="font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center">
-        <SplitWords staggerStart={1}>Ready to Launch?</SplitWords>
+      <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 0 }}>
+        Coming Soon
       </h2>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+        <SplitWords staggerStart={1}>Ready to Launch?</SplitWords>
+      </p>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
         Add Cosmo Tales to your Steam wishlist and be the first to
         know when the adventure begins.

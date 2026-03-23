@@ -82,6 +82,7 @@ function SteamIcon({ className = 'w-5 h-5' }) {
    HERO SECTION
    ═══════════════════════════════════════════ */
 function Hero() {
+  const { t } = useLang()
   const heroRef      = useRef(null)
   // Parallax: two separate lerp tracks at different speeds for depth
   const bgTarget     = useRef({ x: 0, y: 0 })   // background (slow)
@@ -210,7 +211,9 @@ function Hero() {
 
       {/* Hero Text + CTA grouped together */}
       <div className="absolute bottom-[10vh] md:bottom-[12vh] left-0 right-0 flex flex-col items-center gap-6 md:gap-9 z-[15] px-5">
-        <HeroTitle />
+        <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
+          {t.heroLine1}<br />{t.heroLine2}
+        </h1>
         <SteamWishlistButton />
       </div>
     </section>
@@ -223,16 +226,6 @@ function HeatmapSteamIcon() {
     <span className="relative w-[38px] h-[38px] rounded-full overflow-hidden flex items-center justify-center shrink-0 bg-white/10 img-outline">
       <img src={STEAM_ICON_URL} alt="" className="w-full h-full object-cover" style={{ filter: 'brightness(0) invert(1)' }} />
     </span>
-  )
-}
-
-/* ─── Hero title (localized) ─── */
-function HeroTitle() {
-  const { t } = useLang()
-  return (
-    <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
-      {t.heroLine1}<br />{t.heroLine2}
-    </h1>
   )
 }
 
@@ -565,25 +558,23 @@ function Footer() {
     <footer className="flex flex-col items-center w-full px-5 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 gap-5 md:gap-6" style={{ boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.06), inset 0 1px 4px 0 rgba(0,0,0,0.15)' }}>
       {/* Nav links row */}
       <div className="flex flex-wrap items-center gap-5 md:gap-7 w-full">
-        <div className="flex flex-wrap gap-5 md:gap-7">
-          {[
-            { label: 'Discord', href: 'https://discord.gg/h4bZ4A5aqw' },
-            { label: 'X / Twitter', href: 'https://x.com/CosmoTalesGame' },
-            { label: 'Facebook', href: 'https://www.facebook.com/cosmotalesgame' },
-            { label: 'Instagram', href: 'https://www.instagram.com/cosmotalesgame/' },
-            { label: t.privacyPolicy, href: '/privacy', newTab: true },
-          ].map(({ label, href, newTab }) => (
-            <a
-              key={href}
-              href={href}
-              target={href.startsWith('http') || newTab ? '_blank' : undefined}
-              rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
-              className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
-            >
-              {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" />}
-            </a>
-          ))}
-        </div>
+        {[
+          { label: 'Discord', href: 'https://discord.gg/h4bZ4A5aqw' },
+          { label: 'X / Twitter', href: 'https://x.com/CosmoTalesGame' },
+          { label: 'Facebook', href: 'https://www.facebook.com/cosmotalesgame' },
+          { label: 'Instagram', href: 'https://www.instagram.com/cosmotalesgame/' },
+          { label: t.privacyPolicy, href: '/privacy', newTab: true },
+        ].map(({ label, href, newTab }) => (
+          <a
+            key={href}
+            href={href}
+            target={href.startsWith('http') || newTab ? '_blank' : undefined}
+            rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
+            className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
+          >
+            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" />}
+          </a>
+        ))}
         <button
           onClick={() => setLang(lang === 'cs' ? 'en' : 'cs')}
           className="text-[13px] leading-4 text-white transition-colors cursor-pointer link-reveal md:ml-auto"

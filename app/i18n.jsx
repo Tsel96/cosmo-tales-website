@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState, useEffect } from 'react'
 
 const translations = {
   en: {
@@ -132,23 +132,20 @@ export function LangProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.lang = lang
-  }, [lang])
-
-  useEffect(() => {
     document.title = translations[lang].metaTitle
   }, [lang])
 
-  const setLang = (l) => {
+  const setLang = useCallback((l) => {
     setLangState(l)
     localStorage.setItem('lang', l)
-    // Persist as a cookie too so middleware won't override the manual choice
+    // Cookie prevents middleware from overriding a manual choice
     document.cookie = `lang=${l}; path=/; max-age=31536000; SameSite=Lax`
-  }
+  }, [])
 
-  const t = translations[lang]
+  const value = useMemo(() => ({ lang, setLang, t: translations[lang] }), [lang, setLang])
 
   return (
-    <LangContext.Provider value={{ lang, setLang, t }}>
+    <LangContext.Provider value={value}>
       {children}
     </LangContext.Provider>
   )

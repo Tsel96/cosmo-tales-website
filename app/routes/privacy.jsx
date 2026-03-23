@@ -1,5 +1,5 @@
 const ASSETS = 'https://workers.paper.design/file-assets/01KJPX5MQYW5WMXDR20PGMHFVR/'
-const LOGO_URL = ASSETS + '4R6PV7795HJ9QW1QEYBDPBKEGQ.png'
+const LOGO_URL = '/CosmoLogo.svg'
 
 export function meta() {
   return [

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { HalftoneCmyk, HalftoneDots, PulsingBorder, Heatmap } from '@paper-design/shaders-react'
+import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-react'
 
 /* ─── Scroll-triggered reveal: adds .visible to all .animate-enter-wait children ─── */
 function useReveal(threshold = 0.35) {
@@ -53,7 +53,6 @@ const ASSETS = 'https://workers.paper.design/file-assets/01KJPX5MQYW5WMXDR20PGMH
 const LOGO_URL = ASSETS + '4R6PV7795HJ9QW1QEYBDPBKEGQ.png'
 const SHIP_URL = ASSETS + '16BDY4JWN7S32GW0Y4J5X4YC1D.png'
 const HERO_BG_URL = '/hero-bg-hd.webp'
-const DOTS_BG_URL = ASSETS + '01KJSFYAV9RN9H2920NNRVPS26.png'
 const STEAM_ICON_URL = ASSETS + '01KJSGM5CCA1ZVHYDWH64816GQ.png'
 // 1x1 white pixel for ambient glow heatmap (no visible image pattern)
 const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='
@@ -176,28 +175,6 @@ function Hero() {
           transform: `translate(calc(-50% + ${fg.x}px), calc(-50% + ${fg.y}px))`,
         }}
       >
-        {/* Circular halftone dots vignette */}
-        <div className="absolute inset-0 rounded-full overflow-hidden isolate">
-          <HalftoneDots
-            className="absolute inset-0 -z-10"
-            image={DOTS_BG_URL}
-            fit="contain"
-            type="classic"
-            grid="hex"
-            size={0.18}
-            radius={1.29}
-            contrast={1}
-            scale={1}
-            originalColors
-            colorFront="#2B2B2B"
-            colorBack="#00000000"
-            grainMixer={0.26}
-            grainOverlay={0.24}
-            grainSize={0.25}
-            speed={0}
-          />
-        </div>
-
         {/* Ship image */}
         {isMobile ? (
           <div

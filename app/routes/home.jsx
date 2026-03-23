@@ -58,6 +58,15 @@ const STEAM_ICON_URL = ASSETS + '01KJSGM5CCA1ZVHYDWH64816GQ.png'
 const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='
 const STEAM_URL = 'https://store.steampowered.com/app/3601630/Cosmo_Tales/?l=czech'
 
+/* ─── External link arrow icon (marks links opening in new tab) ─── */
+function ExternalLinkIcon({ className = 'w-3 h-3' }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M11.9993 10V4M11.9993 4H5.99935M11.9993 4L4.16602 11.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
 /* ─── Steam SVG Icon ─── */
 function SteamIcon({ className = 'w-5 h-5' }) {
   return (
@@ -150,7 +159,7 @@ function Hero() {
 
       {/* Nav */}
       <nav className="absolute top-6 left-5 right-5 md:top-12 md:left-12 md:right-12 flex items-center justify-center md:justify-start z-20">
-        <img src={LOGO_URL} alt="Cosmo Tales" className="h-[144px] md:h-[133px] 2xl:h-[222px] w-auto" />
+        <img src={LOGO_URL} alt="Cosmo Tales" className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
       </nav>
 
       {/* Hero Visual — portal + ship, foreground parallax (moves with cursor) */}
@@ -261,12 +270,12 @@ function Story() {
   const ref = useReveal()
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 0 }}>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center max-w-[640px]">
+        <SplitWords staggerStart={0}>Cars in Space?!</SplitWords>
+      </p>
+      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 3 }}>
         The Story
       </h2>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center max-w-[640px]">
-        <SplitWords staggerStart={1}>Cars in Space?!</SplitWords>
-      </p>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
         Buckle up, hit the gas and switch between dimensions in a totally
         fresh space adventure full of wit and emotional stories. Each sector
@@ -364,12 +373,12 @@ function Features() {
   const ref = useReveal()
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 0 }}>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+        <SplitWords staggerStart={0}>What Awaits You</SplitWords>
+      </p>
+      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
         Features
       </h2>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
-        <SplitWords staggerStart={1}>What Awaits You</SplitWords>
-      </p>
       <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
         {FEATURES.map((f) => (
           <FeatureCard key={f.title} {...f} reverse={f.title !== 'Space Combat'} />
@@ -386,12 +395,12 @@ function Trailer() {
   const ref = useReveal()
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 0 }}>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+        <SplitWords staggerStart={0}>Watch the Trailer</SplitWords>
+      </p>
+      <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
         Trailer
       </h2>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
-        <SplitWords staggerStart={1}>Watch the Trailer</SplitWords>
-      </p>
       <div className="animate-enter w-full max-w-[1080px] pt-6 md:pt-12" style={{ '--stagger': 4 }}>
         {/* filter wrapper — drop-shadow respects clip-path shape for outline + glow */}
         <div style={{
@@ -455,12 +464,12 @@ function EmailSignup() {
 
   return (
     <section ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
-      <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 0 }}>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+        <SplitWords staggerStart={0}>Get Notified at Launch</SplitWords>
+      </p>
+      <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 4 }}>
         Stay in the Loop
       </h2>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
-        <SplitWords staggerStart={1}>Get Notified at Launch</SplitWords>
-      </p>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
         Drop your email and be the first to know when the adventure begins.
       </p>
@@ -513,7 +522,7 @@ function EmailSignup() {
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
         We'll only use your email to notify you about Cosmo Tales.{' '}
-        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-white visited:text-[var(--color-visited)] transition-colors link-reveal">Privacy Policy</a>
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">Privacy Policy<ExternalLinkIcon className="w-2.5 h-2.5 opacity-60" /></a>
       </p>
     </section>
   )
@@ -526,12 +535,12 @@ function CtaSection() {
   const ref = useReveal()
   return (
     <section ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
-      <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 0 }}>
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+        <SplitWords staggerStart={0}>Ready to Launch?</SplitWords>
+      </p>
+      <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
         Coming Soon
       </h2>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
-        <SplitWords staggerStart={1}>Ready to Launch?</SplitWords>
-      </p>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
         Add Cosmo Tales to your Steam wishlist and be the first to
         know when the adventure begins.
@@ -563,9 +572,9 @@ function Footer() {
             href={href}
             target={href.startsWith('http') || newTab ? '_blank' : undefined}
             rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
-            className="text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
+            className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
           >
-            {label}
+            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-2.5 h-2.5 opacity-60" />}
           </a>
         ))}
       </div>

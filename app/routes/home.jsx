@@ -160,7 +160,7 @@ function Hero() {
 
       {/* Nav */}
       <nav className="absolute top-6 left-5 right-5 md:top-12 md:left-12 md:right-12 flex items-center justify-center md:justify-start z-20">
-        <img src="/bi-logo-white.svg" alt="Cosmo Tales" className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
+        <img src="/CosmoLogo.svg" alt="Cosmo Tales" className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
       </nav>
 
       {/* Hero Visual — portal + ship, foreground parallax (moves with cursor) */}

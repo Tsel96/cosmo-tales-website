@@ -64,7 +64,7 @@ const translations = {
     heroLine2: 'za hvězdami',
 
     // Steam buttons
-    wishlistOnSteam: 'Přidat na Steam',
+    wishlistOnSteam: 'Přidat na wishlist',
     addToWishlist: 'Přidat na seznam přání',
 
     // Story

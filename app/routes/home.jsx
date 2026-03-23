@@ -61,8 +61,8 @@ const STEAM_URL = 'https://store.steampowered.com/app/3601630/Cosmo_Tales/?l=cze
 /* ─── External link arrow icon (marks links opening in new tab) ─── */
 function ExternalLinkIcon({ className = 'w-3 h-3' }) {
   return (
-    <svg className={className} viewBox="0 0 12 12" fill="none" aria-hidden="true">
-      <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M11.9993 10V4M11.9993 4H5.99935M11.9993 4L4.16602 11.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   )
 }

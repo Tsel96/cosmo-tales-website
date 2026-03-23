@@ -8,6 +8,7 @@ import {
   useRouteError,
 } from "react-router";
 import { Agentation } from "agentation";
+import { LangProvider } from "./i18n";
 import "./app.css";
 
 export const links = () => [
@@ -66,7 +67,11 @@ export function HydrateFallback() {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <LangProvider>
+      <Outlet />
+    </LangProvider>
+  );
 }
 
 export function ErrorBoundary() {

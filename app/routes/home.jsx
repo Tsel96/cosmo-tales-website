@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-react'
+import { useLang } from '../i18n'
 
 /* ─── Scroll-triggered reveal: adds .visible to all .animate-enter-wait children ─── */
 function useReveal(threshold = 0.35) {
@@ -209,9 +210,7 @@ function Hero() {
 
       {/* Hero Text + CTA grouped together */}
       <div className="absolute bottom-[10vh] md:bottom-[12vh] left-0 right-0 flex flex-col items-center gap-6 md:gap-9 z-[15] px-5">
-        <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
-          Journey Beyond<br />the Stars
-        </h1>
+        <HeroTitle />
         <SteamWishlistButton />
       </div>
     </section>
@@ -227,8 +226,19 @@ function HeatmapSteamIcon() {
   )
 }
 
+/* ─── Hero title (localized) ─── */
+function HeroTitle() {
+  const { t } = useLang()
+  return (
+    <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
+      {t.heroLine1}<br />{t.heroLine2}
+    </h1>
+  )
+}
+
 /* ─── Shared Steam Wishlist Button (hero + CTA) ─── */
 function SteamWishlistButton() {
+  const { t } = useLang()
   return (
     <a
       href={STEAM_URL}
@@ -257,7 +267,7 @@ function SteamWishlistButton() {
       />
       <HeatmapSteamIcon />
       <span className="font-semibold text-base tracking-[-0.02em] text-white leading-5">
-        Wishlist on Steam
+        {t.wishlistOnSteam}
       </span>
     </a>
   )
@@ -268,19 +278,17 @@ function SteamWishlistButton() {
    ═══════════════════════════════════════════ */
 function Story() {
   const ref = useReveal()
+  const { t } = useLang()
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center max-w-[640px]">
-        <SplitWords staggerStart={0}>Cars in Space?!</SplitWords>
+        <SplitWords staggerStart={0}>{t.storyEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 3 }}>
-        The Story
+        {t.storyTitle}
       </h2>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
-        Buckle up, hit the gas and switch between dimensions in a totally
-        fresh space adventure full of wit and emotional stories. Each sector
-        is a standalone comic episode with characters, conflicts and
-        interdimensional drama.
+        {t.storyText}
       </p>
     </section>
   )
@@ -289,23 +297,15 @@ function Story() {
 /* ═══════════════════════════════════════════
    FEATURES SECTION
    ═══════════════════════════════════════════ */
-const FEATURES = [
-  {
-    video: '/videos/feature-1.mp4',
-    title: 'Dimension Switching',
-    desc: 'Switch between alternative reality versions at the press of a button — escape traps, solve puzzles or turn the tide of seemingly lost battles.',
-  },
-  {
-    video: '/videos/feature-2.mp4',
-    title: 'Space Combat',
-    desc: 'Shoot, dodge and maneuver! Overcome chaotic swarms and sophisticated enemy formations, colossal bosses and massive motherships.',
-  },
-  {
-    video: '/videos/feature-3.mp4',
-    title: 'A Vibrant Universe',
-    desc: 'Vibrant colors, donut-shaped planets, bright stars and rainbow-hued space. Each sector features its own comic book style inspired by retro 1970s sci-fi.',
-  },
-]
+const FEATURE_VIDEOS = ['/videos/feature-1.mp4', '/videos/feature-2.mp4', '/videos/feature-3.mp4']
+
+function getFeatures(t) {
+  return [
+    { video: FEATURE_VIDEOS[0], title: t.feature1Title, desc: t.feature1Desc },
+    { video: FEATURE_VIDEOS[1], title: t.feature2Title, desc: t.feature2Desc },
+    { video: FEATURE_VIDEOS[2], title: t.feature3Title, desc: t.feature3Desc },
+  ]
+}
 
 function FeatureCard({ video, title, desc, reverse }) {
   const cardRef = useReveal(0.25)
@@ -371,17 +371,19 @@ function FeatureCard({ video, title, desc, reverse }) {
 
 function Features() {
   const ref = useReveal()
+  const { t } = useLang()
+  const features = getFeatures(t)
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
-        <SplitWords staggerStart={0}>What Awaits You</SplitWords>
+        <SplitWords staggerStart={0}>{t.featuresEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
-        Features
+        {t.featuresTitle}
       </h2>
       <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
-        {FEATURES.map((f) => (
-          <FeatureCard key={f.title} {...f} reverse={f.title !== 'Space Combat'} />
+        {features.map((f, i) => (
+          <FeatureCard key={f.video} {...f} reverse={i !== 1} />
         ))}
       </div>
     </section>
@@ -393,13 +395,14 @@ function Features() {
    ═══════════════════════════════════════════ */
 function Trailer() {
   const ref = useReveal()
+  const { t } = useLang()
   return (
     <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
-        <SplitWords staggerStart={0}>Watch the Trailer</SplitWords>
+        <SplitWords staggerStart={0}>{t.trailerEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
-        Trailer
+        {t.trailerTitle}
       </h2>
       <div className="animate-enter w-full max-w-[1080px] pt-6 md:pt-12" style={{ '--stagger': 4 }}>
         {/* filter wrapper — drop-shadow respects clip-path shape for outline + glow */}
@@ -434,6 +437,7 @@ function Trailer() {
    ═══════════════════════════════════════════ */
 function EmailSignup() {
   const fadeRef = useReveal()
+  const { t } = useLang()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [message, setMessage] = useState('')
@@ -450,28 +454,28 @@ function EmailSignup() {
       const data = await res.json()
       if (res.ok) {
         setStatus('success')
-        setMessage("You're in! We'll notify you at launch.")
+        setMessage(t.emailSuccess)
         setEmail('')
       } else {
         setStatus('error')
-        setMessage(data.error || 'Something went wrong. Please try again.')
+        setMessage(data.error || t.emailError)
       }
     } catch {
       setStatus('error')
-      setMessage('Network error. Please try again.')
+      setMessage(t.emailNetworkError)
     }
   }
 
   return (
     <section ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
-        <SplitWords staggerStart={0}>Get Notified at Launch</SplitWords>
+        <SplitWords staggerStart={0}>{t.emailEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 4 }}>
-        Stay in the Loop
+        {t.emailTitle}
       </h2>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
-        Drop your email and be the first to know when the adventure begins.
+        {t.emailText}
       </p>
 
       {status === 'success' ? (
@@ -480,7 +484,7 @@ function EmailSignup() {
         <form onSubmit={handleSubmit} className="animate-enter flex flex-col md:flex-row items-center mt-8 gap-3 w-full md:w-auto" style={{ '--stagger': 6 }}>
           <input
             type="email"
-            placeholder="Enter your email"
+            placeholder={t.emailPlaceholder}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -512,7 +516,7 @@ function EmailSignup() {
               colorBack="#00000000"
             />
             <span className="font-semibold text-base tracking-[-0.02em] text-white leading-5 py-2.5">
-              {status === 'loading' ? 'Sending...' : 'Notify Me'}
+              {status === 'loading' ? t.emailSending : t.emailButton}
             </span>
           </button>
         </form>
@@ -521,8 +525,8 @@ function EmailSignup() {
         <p className="text-red-400 text-sm mt-2">{message}</p>
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
-        We'll only use your email to notify you about Cosmo Tales.{' '}
-        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">Privacy Policy<ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" /></a>
+        {t.emailPrivacy}{' '}
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">{t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" /></a>
       </p>
     </section>
   )
@@ -533,17 +537,17 @@ function EmailSignup() {
    ═══════════════════════════════════════════ */
 function CtaSection() {
   const ref = useReveal()
+  const { t } = useLang()
   return (
     <section ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
-        <SplitWords staggerStart={0}>Ready to Launch?</SplitWords>
+        <SplitWords staggerStart={0}>{t.ctaEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
-        Coming Soon
+        {t.ctaTitle}
       </h2>
       <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
-        Add Cosmo Tales to your Steam wishlist and be the first to
-        know when the adventure begins.
+        {t.ctaText}
       </p>
       <div className="animate-enter mt-6" style={{ '--stagger': 5 }}>
         <SteamWishlistButton />
@@ -556,27 +560,36 @@ function CtaSection() {
    FOOTER
    ═══════════════════════════════════════════ */
 function Footer() {
+  const { lang, setLang, t } = useLang()
   return (
     <footer className="flex flex-col items-center w-full px-5 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 gap-5 md:gap-6" style={{ boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.06), inset 0 1px 4px 0 rgba(0,0,0,0.15)' }}>
       {/* Nav links row */}
-      <div className="flex gap-5 md:gap-7 self-start">
-        {[
-          { label: 'Discord', href: 'https://discord.gg/h4bZ4A5aqw' },
-          { label: 'X / Twitter', href: 'https://x.com/CosmoTalesGame' },
-          { label: 'Facebook', href: 'https://www.facebook.com/cosmotalesgame' },
-          { label: 'Instagram', href: 'https://www.instagram.com/cosmotalesgame/' },
-          { label: 'Privacy Policy', href: '/privacy', newTab: true },
-        ].map(({ label, href, newTab }) => (
-          <a
-            key={label}
-            href={href}
-            target={href.startsWith('http') || newTab ? '_blank' : undefined}
-            rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
-            className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
-          >
-            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" />}
-          </a>
-        ))}
+      <div className="flex flex-wrap items-center gap-5 md:gap-7 w-full">
+        <div className="flex flex-wrap gap-5 md:gap-7">
+          {[
+            { label: 'Discord', href: 'https://discord.gg/h4bZ4A5aqw' },
+            { label: 'X / Twitter', href: 'https://x.com/CosmoTalesGame' },
+            { label: 'Facebook', href: 'https://www.facebook.com/cosmotalesgame' },
+            { label: 'Instagram', href: 'https://www.instagram.com/cosmotalesgame/' },
+            { label: t.privacyPolicy, href: '/privacy', newTab: true },
+          ].map(({ label, href, newTab }) => (
+            <a
+              key={href}
+              href={href}
+              target={href.startsWith('http') || newTab ? '_blank' : undefined}
+              rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
+              className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
+            >
+              {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" />}
+            </a>
+          ))}
+        </div>
+        <button
+          onClick={() => setLang(lang === 'cs' ? 'en' : 'cs')}
+          className="text-[13px] leading-4 text-white/40 hover:text-white transition-colors cursor-pointer md:ml-auto"
+        >
+          {t.langSwitch}
+        </button>
       </div>
       {/* Bottom row: BI logo left · copyright right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-0">

@@ -51,7 +51,6 @@ export function meta() {
 
 /* ─── Asset URLs from Paper design ─── */
 const ASSETS = 'https://workers.paper.design/file-assets/01KJPX5MQYW5WMXDR20PGMHFVR/'
-const LOGO_URL = ASSETS + '4R6PV7795HJ9QW1QEYBDPBKEGQ.png'
 const SHIP_URL = ASSETS + '16BDY4JWN7S32GW0Y4J5X4YC1D.png'
 const HERO_BG_URL = '/hero-bg-hd.webp'
 const STEAM_ICON_URL = ASSETS + '01KJSGM5CCA1ZVHYDWH64816GQ.png'
@@ -161,7 +160,7 @@ function Hero() {
 
       {/* Nav */}
       <nav className="absolute top-6 left-5 right-5 md:top-12 md:left-12 md:right-12 flex items-center justify-center md:justify-start z-20">
-        <img src={LOGO_URL} alt="Cosmo Tales" className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
+        <img src="/bi-logo-white.svg" alt="Cosmo Tales" className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
       </nav>
 
       {/* Hero Visual — portal + ship, foreground parallax (moves with cursor) */}

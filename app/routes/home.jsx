@@ -160,8 +160,8 @@ function Hero() {
       <div className="absolute bottom-0 left-0 right-0 h-[168px] bg-gradient-to-b from-transparent to-space-900 z-10 pointer-events-none" />
 
       {/* Nav */}
-      <nav className="absolute top-6 left-5 right-5 md:top-12 md:left-12 md:right-12 flex items-center z-20">
-        <img src={LOGO_URL} alt="Cosmo Tales" className="h-[48px] md:h-[74px] w-auto" />
+      <nav className="absolute top-6 left-5 right-5 md:top-12 md:left-12 md:right-12 flex items-center justify-center md:justify-start z-20">
+        <img src={LOGO_URL} alt="Cosmo Tales" className="h-[144px] md:h-[133px] 2xl:h-[222px] w-auto" />
       </nav>
 
       {/* Hero Visual — portal + ship, foreground parallax (moves with cursor) */}

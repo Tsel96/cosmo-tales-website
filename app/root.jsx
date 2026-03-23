@@ -7,6 +7,7 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from "react-router";
+import { Agentation } from "agentation";
 import "./app.css";
 
 export const links = () => [
@@ -38,6 +39,7 @@ export function Layout({ children }) {
       </head>
       <body>
         {children}
+        {process.env.NODE_ENV === "development" && <Agentation />}
         <ScrollRestoration />
         <Scripts />
       </body>

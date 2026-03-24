@@ -125,21 +125,10 @@
   a:visited {
     color: var(--color-visited);
   }
-  /* External-link arrow via CSS mask on ::after so :visited coloring works.
-     Descendants of :visited anchors cannot have their color changed (browser
-     privacy restriction), but ::after of the anchor itself can be targeted
-     with :visited::after. */
-  a.ext-link::after {
-    content: '';
-    width: 0.875rem;
-    height: 0.875rem;
-    flex-shrink: 0;
-    background-color: currentColor;
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.9993 10V4M11.9993 4H5.99935M11.9993 4L4.16602 11.8333'/%3E%3C/svg%3E") no-repeat center / contain;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.9993 10V4M11.9993 4H5.99935M11.9993 4L4.16602 11.8333'/%3E%3C/svg%3E") no-repeat center / contain;
-  }
-  a.ext-link:visited::after {
-    background-color: var(--color-visited);
+  /* Direct rule so SVG currentColor resolves to visited color
+     (color doesn't inherit to children of :visited links) */
+  a:visited svg {
+    color: var(--color-visited);
   }
   h1, h2, h3 {
     text-wrap: balance;

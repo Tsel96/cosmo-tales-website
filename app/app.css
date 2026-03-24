@@ -125,6 +125,11 @@
   a:visited {
     color: var(--color-visited);
   }
+  /* Direct rule so SVG currentColor resolves to visited color
+     (color doesn't inherit to children of :visited links) */
+  a:visited svg {
+    color: var(--color-visited);
+  }
   h1, h2, h3 {
     text-wrap: balance;
   }

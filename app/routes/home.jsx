@@ -532,7 +532,7 @@ function EmailSignup() {
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
         {t.emailPrivacy}{' '}
-        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">{t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" /></a>
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">{t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" /></a>
       </p>
     </section>
   )
@@ -585,7 +585,7 @@ function Footer() {
             rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
             className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
           >
-            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" />}
+            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
           </a>
         ))}
         <button

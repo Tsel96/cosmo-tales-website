@@ -15,13 +15,13 @@ const translations = {
     addToWishlist: 'Add to your Steam Wishlist',
 
     // Story
-    storyEyebrow: 'Cars in Space?!',
-    storyTitle: 'The Story',
+    storyEyebrow: 'The Story',
+    storyTitle: 'Cars in Space?!',
     storyText: 'Buckle up, hit the gas and switch between dimensions in a totally fresh space adventure full of wit and emotional stories. Each sector is a standalone comic episode with characters, conflicts and interdimensional drama.',
 
     // Features
-    featuresEyebrow: 'What Awaits You',
-    featuresTitle: 'Features',
+    featuresEyebrow: 'Features',
+    featuresTitle: 'What Awaits You',
     feature1Title: 'Dimension Switching',
     feature1Desc: 'Switch between alternative reality versions at the press of a button — escape traps, solve puzzles or turn the tide of seemingly lost battles.',
     feature2Title: 'Space Combat',
@@ -30,12 +30,12 @@ const translations = {
     feature3Desc: 'Vibrant colors, donut-shaped planets, bright stars and rainbow-hued space. Each sector features its own comic book style inspired by retro 1970s sci-fi.',
 
     // Trailer
-    trailerEyebrow: 'Watch the Trailer',
-    trailerTitle: 'Trailer',
+    trailerEyebrow: 'Trailer',
+    trailerTitle: 'Watch the Trailer',
 
     // Email signup
-    emailEyebrow: 'Get Notified at Launch',
-    emailTitle: 'Stay in the Loop',
+    emailEyebrow: 'Stay in the Loop',
+    emailTitle: 'Get Notified at Launch',
     emailText: 'Drop your email and be the first to know when the adventure begins.',
     emailPlaceholder: 'Enter your email',
     emailButton: 'Notify Me',
@@ -47,8 +47,8 @@ const translations = {
     privacyPolicy: 'Privacy Policy',
 
     // CTA
-    ctaEyebrow: 'Ready to Launch?',
-    ctaTitle: 'Coming Soon',
+    ctaEyebrow: 'Coming Soon',
+    ctaTitle: 'Ready to Launch?',
     ctaText: 'Add Cosmo Tales to your Steam wishlist and be the first to know when the adventure begins.',
 
     // Footer
@@ -68,13 +68,13 @@ const translations = {
     addToWishlist: 'Přidat na seznam přání',
 
     // Story
-    storyEyebrow: 'Auta ve vesmíru?!',
-    storyTitle: 'Příběh',
+    storyEyebrow: 'Příběh',
+    storyTitle: 'Auta ve vesmíru?!',
     storyText: 'Připoutejte se, šlápněte na plyn a přepínejte mezi dimenzemi v naprosto unikátním vesmírném dobrodružství plném vtipu a emotivních příběhů. Každý sektor je samostatná komiksová epizoda s vlastními postavami, konflikty a mezidimenzionálním dramatem.',
 
     // Features
-    featuresEyebrow: 'Co vás čeká',
-    featuresTitle: 'Vlastnosti',
+    featuresEyebrow: 'Vlastnosti',
+    featuresTitle: 'Co vás čeká',
     feature1Title: 'Přepínání dimenzí',
     feature1Desc: 'Přepínejte mezi alternativními verzemi reality stisknutím tlačítka — unikejte z pastí, řešte hádanky nebo obraťte průběh zdánlivě prohraných bitev.',
     feature2Title: 'Vesmírné bitvy',
@@ -83,12 +83,12 @@ const translations = {
     feature3Desc: 'Zářivé barvy, planety ve tvaru donutů, jasné hvězdy a duhově zbarvený vesmír. Každý sektor má svůj vlastní komiksový styl inspirovaný retro sci-fi ze 70. let.',
 
     // Trailer
-    trailerEyebrow: 'Podívejte se na trailer',
-    trailerTitle: 'Trailer',
+    trailerEyebrow: 'Trailer',
+    trailerTitle: 'Podívejte se na trailer',
 
     // Email signup
-    emailEyebrow: 'Buďte informováni',
-    emailTitle: 'Zůstaňte v obraze',
+    emailEyebrow: 'Zůstaňte v obraze',
+    emailTitle: 'Buďte informováni',
     emailText: 'Zadejte svůj email a buďte první, kdo se dozví o startu dobrodružství.',
     emailPlaceholder: 'Zadejte svůj email',
     emailButton: 'Informujte mě',
@@ -100,8 +100,8 @@ const translations = {
     privacyPolicy: 'Zásady ochrany soukromí',
 
     // CTA
-    ctaEyebrow: 'Připraveni ke startu?',
-    ctaTitle: 'Již brzy',
+    ctaEyebrow: 'Již brzy',
+    ctaTitle: 'Připraveni ke startu?',
     ctaText: 'Přidejte si Cosmo Tales na seznam přání ve Steamu a buďte první, kdo se dozví o startu dobrodružství.',
 
     // Footer

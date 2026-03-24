@@ -532,7 +532,7 @@ function EmailSignup() {
       )}
       <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
         {t.emailPrivacy}{' '}
-        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">{t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" /></a>
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">{t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" /></a>
       </p>
     </section>
   )
@@ -585,7 +585,7 @@ function Footer() {
             rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
             className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
           >
-            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5 opacity-60" />}
+            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
           </a>
         ))}
         <button
@@ -813,27 +813,25 @@ function ScrollScrubber() {
   const { t } = useLang()
   const trackRef = useRef(null)
   const touchingRef = useRef(false)
-  const hideTimer = useRef(null)
+  const inactivityTimer = useRef(null)
 
   const [scrollRatio, setScrollRatio] = useState(0)
   const [viewportRatio, setViewportRatio] = useState(1)
   const [activeIdx, setActiveIdx] = useState(0)
-  const [labelVisible, setLabelVisible] = useState(false)
+  const [active, setActive] = useState(false)   // scrubber visible (scroll in progress)
+  const [touching, setTouching] = useState(false) // touching the scrubber track
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
   )
 
-  // Desktop: always show label. Mobile: only while touching.
   useEffect(() => {
     const mq = window.matchMedia('(hover: none)')
-    const update = (matches) => { setIsMobile(matches); if (!matches) setLabelVisible(true) }
-    update(mq.matches)
-    const onChange = (e) => update(e.matches)
+    const onChange = (e) => setIsMobile(e.matches)
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
   }, [])
 
-  // Scroll progress + active section (single handler, no duplicate observers)
+  // Scroll progress + active section + scrubber visibility
   useEffect(() => {
     const onScroll = () => {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight
@@ -842,14 +840,18 @@ function ScrollScrubber() {
       const anchor = window.scrollY + window.innerHeight * 0.4
       for (let i = SECTIONS.length - 1; i >= 0; i--) {
         const el = document.getElementById(SECTIONS[i].id)
-        if (el && el.offsetTop <= anchor) { setActiveIdx(i); return }
+        if (el && el.offsetTop <= anchor) { setActiveIdx(i); break }
       }
+
+      // Show scrubber, then hide 1.5 s after scroll stops
+      setActive(true)
+      clearTimeout(inactivityTimer.current)
+      inactivityTimer.current = setTimeout(() => setActive(false), 1500)
     }
     const onResize = () => {
       setViewportRatio(window.innerHeight / document.documentElement.scrollHeight)
-      onScroll()
     }
-    onScroll(); onResize()
+    onResize()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize, { passive: true })
     return () => {
@@ -873,13 +875,13 @@ function ScrollScrubber() {
     return () => el.removeEventListener('touchmove', onMove)
   }, [])
 
-  // Timer cleanup on unmount
-  useEffect(() => () => clearTimeout(hideTimer.current), [])
+  useEffect(() => () => clearTimeout(inactivityTimer.current), [])
 
   const handleTouchStart = (e) => {
-    clearTimeout(hideTimer.current)
+    clearTimeout(inactivityTimer.current)
     touchingRef.current = true
-    setLabelVisible(true)
+    setActive(true)
+    setTouching(true)
     const { top, height } = trackRef.current.getBoundingClientRect()
     const ratio = Math.max(0, Math.min(1, (e.touches[0].clientY - top) / height))
     window.scrollTo({ top: ratio * (document.documentElement.scrollHeight - window.innerHeight), behavior: 'instant' })
@@ -887,7 +889,8 @@ function ScrollScrubber() {
 
   const handleTouchEnd = () => {
     touchingRef.current = false
-    hideTimer.current = setTimeout(() => setLabelVisible(false), 800)
+    setTouching(false)
+    inactivityTimer.current = setTimeout(() => setActive(false), 1500)
   }
 
   // Click-to-scroll on desktop
@@ -898,8 +901,10 @@ function ScrollScrubber() {
     window.scrollTo({ top: ratio * (document.documentElement.scrollHeight - window.innerHeight), behavior: 'smooth' })
   }
 
-  const thumbH = Math.max(viewportRatio * 100, 5)      // % of track, min 5%
-  const thumbTop = scrollRatio * (100 - thumbH)          // % from track top
+  const thumbH = Math.max(viewportRatio * 100, 5)
+  const thumbTop = scrollRatio * (100 - thumbH)
+  // Label: desktop shows whenever scrubber is active; mobile only while touching the track
+  const labelVisible = active && (!isMobile || touching)
 
   return (
     <div className="fixed right-0 inset-y-0 z-50 pointer-events-none">
@@ -911,12 +916,23 @@ function ScrollScrubber() {
         onClick={handleClick}
       >
         {/* Track line */}
-        <div className="absolute inset-y-0 right-[6px] w-[2px] rounded-full bg-white/[0.08]" />
+        <div
+          className="absolute inset-y-0 right-[6px] w-[2px] rounded-full bg-white/[0.08]"
+          style={{
+            opacity: active ? 1 : 0,
+            transition: 'opacity 300ms var(--ease-spring)',
+          }}
+        />
 
         {/* Thumb */}
         <div
           className="absolute right-[6px] w-[2px] rounded-full bg-white/40"
-          style={{ top: `${thumbTop}%`, height: `${thumbH}%` }}
+          style={{
+            top: `${thumbTop}%`,
+            height: `${thumbH}%`,
+            opacity: active ? 1 : 0,
+            transition: 'opacity 300ms var(--ease-spring)',
+          }}
         />
 
         {/* Section label — slides in from the right, offset left so it clears the finger */}

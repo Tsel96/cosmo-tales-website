@@ -109,6 +109,10 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+  }
+  html::-webkit-scrollbar {
+    display: none; /* Chrome / Safari / Edge */
   }
   body {
     margin: 0;

@@ -14,6 +14,14 @@ const translations = {
     wishlistOnSteam: 'Wishlist on Steam',
     addToWishlist: 'Add to your Steam Wishlist',
 
+    // Scroll scrubber section labels
+    navHero: 'Hero',
+    navStory: 'Story',
+    navFeatures: 'Features',
+    navTrailer: 'Trailer',
+    navEmail: 'Newsletter',
+    navCta: 'Wishlist',
+
     // Story
     storyEyebrow: 'The Story',
     storyTitle: 'Cars in Space?!',
@@ -66,6 +74,14 @@ const translations = {
     // Steam buttons
     wishlistOnSteam: 'Přidat na wishlist',
     addToWishlist: 'Přidat na seznam přání',
+
+    // Scroll scrubber section labels
+    navHero: 'Intro',
+    navStory: 'Příběh',
+    navFeatures: 'Vlastnosti',
+    navTrailer: 'Trailer',
+    navEmail: 'Newsletter',
+    navCta: 'Wishlist',
 
     // Story
     storyEyebrow: 'Příběh',

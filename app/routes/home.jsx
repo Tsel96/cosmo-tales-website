@@ -3,7 +3,24 @@ import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-reac
 import { useLang } from '../i18n'
 import { CosmoLogo } from '../CosmoLogo'
 
-/* ─── Scroll-triggered reveal: adds .visible to all .animate-enter-wait children ─── */
+/* ─── Returns true once element has scrolled fully out of viewport ─── */
+function useScrolledPast() {
+  const ref = useRef(null)
+  const [isPast, setIsPast] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setIsPast(!entry.isIntersecting),
+      { threshold: 0 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, isPast]
+}
+
+/* ─── Scroll-triggered reveal: adds .visible to all .animate-enter children ─── */
 function useReveal(threshold = 0.35) {
   const ref = useRef(null)
 
@@ -138,6 +155,7 @@ function Hero() {
 
   return (
     <section
+      id="section-hero"
       ref={heroRef}
       className="relative w-full h-[75vh] md:h-[85vh] flex flex-col items-center overflow-hidden isolate"
     >
@@ -268,7 +286,7 @@ function Story() {
   const ref = useReveal()
   const { t } = useLang()
   return (
-    <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4" style={{ '--delay': '80ms' }}>
+    <section id="section-story" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center max-w-[640px]">
         <SplitWords staggerStart={0}>{t.storyEyebrow}</SplitWords>
       </p>
@@ -362,7 +380,7 @@ function Features() {
   const { t } = useLang()
   const features = getFeatures(t)
   return (
-    <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
+    <section id="section-features" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
         <SplitWords staggerStart={0}>{t.featuresEyebrow}</SplitWords>
       </p>
@@ -385,7 +403,7 @@ function Trailer() {
   const ref = useReveal()
   const { t } = useLang()
   return (
-    <section ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
+    <section id="section-trailer" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
         <SplitWords staggerStart={0}>{t.trailerEyebrow}</SplitWords>
       </p>
@@ -455,7 +473,7 @@ function EmailSignup() {
   }
 
   return (
-    <section ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
+    <section id="section-email" ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
         <SplitWords staggerStart={0}>{t.emailEyebrow}</SplitWords>
       </p>
@@ -527,7 +545,7 @@ function CtaSection() {
   const ref = useReveal()
   const { t } = useLang()
   return (
-    <section ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
+    <section id="section-cta" ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
         <SplitWords staggerStart={0}>{t.ctaEyebrow}</SplitWords>
       </p>
@@ -779,6 +797,149 @@ function StarField() {
   )
 }
 
+/* ═══════════════════════════════════════════
+   SCROLL SCRUBBER
+   ═══════════════════════════════════════════ */
+const SECTIONS = [
+  { id: 'section-hero',     labelKey: 'navHero' },
+  { id: 'section-story',    labelKey: 'navStory' },
+  { id: 'section-features', labelKey: 'navFeatures' },
+  { id: 'section-trailer',  labelKey: 'navTrailer' },
+  { id: 'section-email',    labelKey: 'navEmail' },
+  { id: 'section-cta',      labelKey: 'navCta' },
+]
+
+function ScrollScrubber() {
+  const { t } = useLang()
+  const trackRef = useRef(null)
+  const touchingRef = useRef(false)
+  const hideTimer = useRef(null)
+
+  const [scrollRatio, setScrollRatio] = useState(0)
+  const [viewportRatio, setViewportRatio] = useState(1)
+  const [activeIdx, setActiveIdx] = useState(0)
+  const [labelVisible, setLabelVisible] = useState(false)
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
+  )
+
+  // Desktop: always show label. Mobile: only while touching.
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: none)')
+    const update = (matches) => { setIsMobile(matches); if (!matches) setLabelVisible(true) }
+    update(mq.matches)
+    const onChange = (e) => update(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  // Scroll progress + active section (single handler, no duplicate observers)
+  useEffect(() => {
+    const onScroll = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+      if (maxScroll > 0) setScrollRatio(window.scrollY / maxScroll)
+
+      const anchor = window.scrollY + window.innerHeight * 0.4
+      for (let i = SECTIONS.length - 1; i >= 0; i--) {
+        const el = document.getElementById(SECTIONS[i].id)
+        if (el && el.offsetTop <= anchor) { setActiveIdx(i); return }
+      }
+    }
+    const onResize = () => {
+      setViewportRatio(window.innerHeight / document.documentElement.scrollHeight)
+      onScroll()
+    }
+    onScroll(); onResize()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onResize, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [])
+
+  // Non-passive touchmove so we can preventDefault and block native scroll while scrubbing
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+    const onMove = (e) => {
+      if (!touchingRef.current) return
+      e.preventDefault()
+      const { top, height } = el.getBoundingClientRect()
+      const ratio = Math.max(0, Math.min(1, (e.touches[0].clientY - top) / height))
+      window.scrollTo({ top: ratio * (document.documentElement.scrollHeight - window.innerHeight), behavior: 'instant' })
+    }
+    el.addEventListener('touchmove', onMove, { passive: false })
+    return () => el.removeEventListener('touchmove', onMove)
+  }, [])
+
+  // Timer cleanup on unmount
+  useEffect(() => () => clearTimeout(hideTimer.current), [])
+
+  const handleTouchStart = (e) => {
+    clearTimeout(hideTimer.current)
+    touchingRef.current = true
+    setLabelVisible(true)
+    const { top, height } = trackRef.current.getBoundingClientRect()
+    const ratio = Math.max(0, Math.min(1, (e.touches[0].clientY - top) / height))
+    window.scrollTo({ top: ratio * (document.documentElement.scrollHeight - window.innerHeight), behavior: 'instant' })
+  }
+
+  const handleTouchEnd = () => {
+    touchingRef.current = false
+    hideTimer.current = setTimeout(() => setLabelVisible(false), 800)
+  }
+
+  // Click-to-scroll on desktop
+  const handleClick = (e) => {
+    if (isMobile) return
+    const { top, height } = trackRef.current.getBoundingClientRect()
+    const ratio = Math.max(0, Math.min(1, (e.clientY - top) / height))
+    window.scrollTo({ top: ratio * (document.documentElement.scrollHeight - window.innerHeight), behavior: 'smooth' })
+  }
+
+  const thumbH = Math.max(viewportRatio * 100, 5)      // % of track, min 5%
+  const thumbTop = scrollRatio * (100 - thumbH)          // % from track top
+
+  return (
+    <div className="fixed right-0 inset-y-0 z-50 pointer-events-none">
+      <div
+        ref={trackRef}
+        className="absolute inset-y-2 right-0 w-6 pointer-events-auto"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onClick={handleClick}
+      >
+        {/* Track line */}
+        <div className="absolute inset-y-0 right-[6px] w-[2px] rounded-full bg-white/[0.08]" />
+
+        {/* Thumb */}
+        <div
+          className="absolute right-[6px] w-[2px] rounded-full bg-white/40"
+          style={{ top: `${thumbTop}%`, height: `${thumbH}%` }}
+        />
+
+        {/* Section label — slides in from the right, offset left so it clears the finger */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: `${thumbTop + thumbH / 2}%`,
+            right: '20px',
+            transform: `translateY(-50%) translateX(${labelVisible ? '0px' : '6px'})`,
+            opacity: labelVisible ? 1 : 0,
+            filter: labelVisible ? 'blur(0px)' : 'blur(3px)',
+            transition: 'opacity 350ms var(--ease-spring), transform 350ms var(--ease-spring), filter 350ms var(--ease-spring)',
+          }}
+        >
+          <div className="bg-white/90 backdrop-blur-sm text-space-900 rounded-2xl px-3 py-1.5 text-[12px] font-semibold leading-none whitespace-nowrap shadow-sm">
+            {t[SECTIONS[activeIdx].labelKey]}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ─── SVG clip-path definition for squircle video mask ─── */
 function VideoMaskDefs() {
   return (
@@ -796,19 +957,7 @@ function VideoMaskDefs() {
 }
 
 export default function Home() {
-  const heroRef = useRef(null)
-  const [pastHero, setPastHero] = useState(false)
-
-  useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => setPastHero(!entry.isIntersecting),
-      { threshold: 0 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
+  const [heroRef, pastHero] = useScrolledPast()
 
   return (
     <div className="relative min-h-screen bg-space-900 overflow-x-hidden">
@@ -816,9 +965,9 @@ export default function Home() {
       <VideoMaskDefs />
 
       {/* Fixed logo */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 md:left-5 md:translate-x-0 md:top-12 2xl:left-12 z-50 pointer-events-auto">
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 md:left-5 md:translate-x-0 md:top-12 2xl:left-12 z-50">
         <CosmoLogo className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
-      </nav>
+      </div>
 
       {/* Fixed wishlist — appears when hero scrolls out */}
       <div
@@ -833,6 +982,8 @@ export default function Home() {
       >
         <SteamWishlistButton />
       </div>
+
+      <ScrollScrubber />
 
       <div ref={heroRef}>
         <Hero />

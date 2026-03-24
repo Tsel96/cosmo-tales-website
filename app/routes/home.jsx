@@ -159,11 +159,6 @@ function Hero() {
       {/* Bottom gradient fade */}
       <div className="absolute bottom-0 left-0 right-0 h-[168px] bg-gradient-to-b from-transparent to-space-900 z-10 pointer-events-none" />
 
-      {/* Nav */}
-      <nav className="absolute top-6 left-5 right-5 md:top-12 md:left-12 md:right-12 flex items-center justify-center md:justify-start z-20">
-        <CosmoLogo className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
-      </nav>
-
       {/* Hero Visual — portal + ship, foreground parallax (moves with cursor) */}
       <div
         className="absolute z-[2]"
@@ -801,11 +796,47 @@ function VideoMaskDefs() {
 }
 
 export default function Home() {
+  const heroRef = useRef(null)
+  const [pastHero, setPastHero] = useState(false)
+
+  useEffect(() => {
+    const el = heroRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setPastHero(!entry.isIntersecting),
+      { threshold: 0 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
     <div className="relative min-h-screen bg-space-900 overflow-x-hidden">
       <StarField />
       <VideoMaskDefs />
-      <Hero />
+
+      {/* Fixed logo */}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 md:left-5 md:translate-x-0 md:top-12 2xl:left-12 z-50 pointer-events-auto">
+        <CosmoLogo className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
+      </nav>
+
+      {/* Fixed wishlist — appears when hero scrolls out */}
+      <div
+        className="fixed top-8 right-5 md:top-14 md:right-12 z-50"
+        style={{
+          opacity: pastHero ? 1 : 0,
+          transform: pastHero ? 'translateY(0)' : 'translateY(-8px)',
+          filter: pastHero ? 'blur(0px)' : 'blur(5px)',
+          transition: 'opacity 500ms var(--ease-spring), transform 500ms var(--ease-spring), filter 500ms var(--ease-spring)',
+          pointerEvents: pastHero ? 'auto' : 'none',
+        }}
+      >
+        <SteamWishlistButton />
+      </div>
+
+      <div ref={heroRef}>
+        <Hero />
+      </div>
       <Story />
       <Features />
       <Trailer />

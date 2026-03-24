@@ -3,7 +3,24 @@ import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-reac
 import { useLang } from '../i18n'
 import { CosmoLogo } from '../CosmoLogo'
 
-/* ─── Scroll-triggered reveal: adds .visible to all .animate-enter-wait children ─── */
+/* ─── Returns true once element has scrolled fully out of viewport ─── */
+function useScrolledPast() {
+  const ref = useRef(null)
+  const [isPast, setIsPast] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setIsPast(!entry.isIntersecting),
+      { threshold: 0 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, isPast]
+}
+
+/* ─── Scroll-triggered reveal: adds .visible to all .animate-enter children ─── */
 function useReveal(threshold = 0.35) {
   const ref = useRef(null)
 
@@ -796,19 +813,7 @@ function VideoMaskDefs() {
 }
 
 export default function Home() {
-  const heroRef = useRef(null)
-  const [pastHero, setPastHero] = useState(false)
-
-  useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => setPastHero(!entry.isIntersecting),
-      { threshold: 0 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
+  const [heroRef, pastHero] = useScrolledPast()
 
   return (
     <div className="relative min-h-screen bg-space-900 overflow-x-hidden">
@@ -816,9 +821,9 @@ export default function Home() {
       <VideoMaskDefs />
 
       {/* Fixed logo */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 md:left-5 md:translate-x-0 md:top-12 2xl:left-12 z-50 pointer-events-auto">
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 md:left-5 md:translate-x-0 md:top-12 2xl:left-12 z-50">
         <CosmoLogo className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
-      </nav>
+      </div>
 
       {/* Fixed wishlist — appears when hero scrolls out */}
       <div

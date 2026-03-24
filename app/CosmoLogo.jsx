@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 
 const VIEWBOX_W = 183
 const VIEWBOX_H = 135
-const LEFT_EYE = { x: 42.1494, y: 52.8877 }
-const RIGHT_EYE = { x: 152.962, y: 52.8877 }
+const LEFT_EYE = { x: 44.23, y: 50.5 }
+const RIGHT_EYE = { x: 155.64, y: 50.57 }
 const EYE_RADIUS = 5.178
-const MAX_OFFSET = 1.5
+const MAX_OFFSET = 4.5
 
 function eyeOffset(center, cursor) {
   if (!cursor) return { x: 0, y: 0 }

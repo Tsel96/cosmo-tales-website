@@ -608,7 +608,7 @@ function Footer() {
       {/* Bottom row: BI logo left · copyright right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-0">
         <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer">
-          <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-6 md:h-7 w-auto opacity-60 hover:opacity-100 transition-opacity" />
+          <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-8 md:h-9 w-auto opacity-60 hover:opacity-100 transition-opacity" />
         </a>
         <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 md:text-right max-w-[480px]">
           &copy; 2026 BOHEMIA INTERACTIVE a.s. Cosmo Tales&reg; and BOHEMIA INTERACTIVE&reg; are registered trademarks of BOHEMIA INTERACTIVE a.s. All rights reserved.

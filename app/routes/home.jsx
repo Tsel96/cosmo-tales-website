@@ -2,6 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-react'
 import { useLang } from '../i18n'
 import { CosmoLogo } from '../CosmoLogo'
+import { useWebHaptics } from 'web-haptics/react'
+
+function useGlobalHaptics() {
+  const { trigger } = useWebHaptics()
+  useEffect(() => {
+    const onTouch = () => trigger()
+    document.addEventListener('touchstart', onTouch, { passive: true })
+    return () => document.removeEventListener('touchstart', onTouch)
+  }, [trigger])
+}
 
 /* ─── Returns true once element has scrolled fully out of viewport ─── */
 function useScrolledPast() {
@@ -598,7 +608,7 @@ function Footer() {
       {/* Bottom row: BI logo left · copyright right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-0">
         <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer">
-          <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-6 md:h-7 w-auto opacity-60 hover:opacity-100 transition-opacity" />
+          <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-8 md:h-9 w-auto opacity-60 hover:opacity-100 transition-opacity" />
         </a>
         <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 md:text-right max-w-[480px]">
           &copy; 2026 BOHEMIA INTERACTIVE a.s. Cosmo Tales&reg; and BOHEMIA INTERACTIVE&reg; are registered trademarks of BOHEMIA INTERACTIVE a.s. All rights reserved.
@@ -974,6 +984,7 @@ function VideoMaskDefs() {
 
 export default function Home() {
   const [heroRef, pastHero] = useScrolledPast()
+  useGlobalHaptics()
 
   return (
     <div className="relative min-h-screen bg-space-900 overflow-x-hidden">
@@ -996,7 +1007,7 @@ export default function Home() {
           }}
         />
         {/* Content row */}
-        <div className="relative flex items-center justify-between px-4 pt-4 md:px-5 md:pt-12 2xl:px-12 pointer-events-auto">
+        <div className="relative flex items-center justify-between px-4 pt-4 md:pl-5 md:pr-12 md:pt-12 2xl:px-12 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
           <div
             style={{

@@ -981,8 +981,8 @@ export default function Home() {
       <VideoMaskDefs />
 
       {/* Fixed logo */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 md:left-5 md:translate-x-0 md:top-12 2xl:left-12 z-50">
-        <CosmoLogo className="h-[101px] md:h-[93px] 2xl:h-[155px] w-auto" />
+      <div className="fixed top-4 left-4 md:left-5 md:top-12 2xl:left-12 z-50">
+        <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
       </div>
 
       {/* Fixed wishlist — appears when hero scrolls out */}

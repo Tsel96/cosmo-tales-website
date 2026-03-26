@@ -2,6 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-react'
 import { useLang } from '../i18n'
 import { CosmoLogo } from '../CosmoLogo'
+import { useWebHaptics } from 'web-haptics/react'
+
+function useGlobalHaptics() {
+  const { trigger } = useWebHaptics()
+  useEffect(() => {
+    const onTouch = () => trigger()
+    document.addEventListener('touchstart', onTouch, { passive: true })
+    return () => document.removeEventListener('touchstart', onTouch)
+  }, [trigger])
+}
 
 /* ─── Returns true once element has scrolled fully out of viewport ─── */
 function useScrolledPast() {
@@ -974,6 +984,7 @@ function VideoMaskDefs() {
 
 export default function Home() {
   const [heroRef, pastHero] = useScrolledPast()
+  useGlobalHaptics()
 
   return (
     <div className="relative min-h-screen bg-space-900 overflow-x-hidden">

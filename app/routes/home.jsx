@@ -980,23 +980,36 @@ export default function Home() {
       <StarField />
       <VideoMaskDefs />
 
-      {/* Fixed logo */}
-      <div className="fixed top-4 left-4 md:left-5 md:top-12 2xl:left-12 z-50">
-        <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
-      </div>
-
-      {/* Fixed wishlist — appears when hero scrolls out */}
-      <div
-        className="fixed top-8 right-5 md:top-14 md:right-12 z-50"
-        style={{
-          opacity: pastHero ? 1 : 0,
-          transform: pastHero ? 'translateY(0)' : 'translateY(-8px)',
-          filter: pastHero ? 'blur(0px)' : 'blur(5px)',
-          transition: 'opacity 500ms var(--ease-spring), transform 500ms var(--ease-spring), filter 500ms var(--ease-spring)',
-          pointerEvents: pastHero ? 'auto' : 'none',
-        }}
-      >
-        <SteamWishlistButton />
+      {/* Fixed navbar: logo + wishlist on same row */}
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+        {/* Progressive blur + gradient — fades in when past hero */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[120px] md:h-[200px] 2xl:h-[280px]"
+          style={{
+            opacity: pastHero ? 1 : 0,
+            transition: 'opacity 600ms ease',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            maskImage: 'linear-gradient(to bottom, black 35%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 35%, transparent 100%)',
+          }}
+        />
+        {/* Content row */}
+        <div className="relative flex items-center justify-between px-4 pt-4 md:px-5 md:pt-12 2xl:px-12 pointer-events-auto">
+          <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
+          <div
+            style={{
+              opacity: pastHero ? 1 : 0,
+              transform: pastHero ? 'translateY(0)' : 'translateY(-8px)',
+              filter: pastHero ? 'blur(0px)' : 'blur(5px)',
+              transition: 'opacity 500ms var(--ease-spring), transform 500ms var(--ease-spring), filter 500ms var(--ease-spring)',
+              pointerEvents: pastHero ? 'auto' : 'none',
+            }}
+          >
+            <SteamWishlistButton />
+          </div>
+        </div>
       </div>
 
       <ScrollScrubber />

@@ -3,25 +3,26 @@ import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-reac
 import { useLang } from '../i18n'
 import { CosmoLogo } from '../CosmoLogo'
 /* ─── Haptic feedback ───────────────────────────────────────────────────────
-   Android: navigator.vibrate (Vibration API)
-   iOS:     programmatic click on <input type="checkbox" switch> — must be
-            opacity:0 not display:none, otherwise iOS silently skips the haptic
+   Android: navigator.vibrate
+   iOS:     <input switch> programmatic click — positioned off-screen so it is
+            real in the layout tree; pointer-events:none + opacity:0 can cause
+            WebKit to skip the haptic even for programmatic .click() calls
    ─────────────────────────────────────────────────────────────────────── */
 let _hapticEl = null
 function haptic() {
   if (typeof navigator === 'undefined') return
   if (navigator.vibrate) {
     navigator.vibrate(10)
-  } else {
-    if (!_hapticEl) {
-      _hapticEl = document.createElement('input')
-      _hapticEl.type = 'checkbox'
-      _hapticEl.setAttribute('switch', '')
-      _hapticEl.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;'
-      document.body.appendChild(_hapticEl)
-    }
-    _hapticEl.click()
+    return
   }
+  if (!_hapticEl) {
+    _hapticEl = document.createElement('input')
+    _hapticEl.type = 'checkbox'
+    _hapticEl.setAttribute('switch', '')
+    _hapticEl.style.cssText = 'position:fixed;left:-200px;top:-200px;'
+    document.body.appendChild(_hapticEl)
+  }
+  _hapticEl.click()
 }
 
 /* ─── Returns true once element has scrolled fully out of viewport ─── */
@@ -272,7 +273,7 @@ function SteamWishlistButton() {
       target="_blank"
       rel="noopener noreferrer"
       className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-3.5 pl-1 bg-black/25 isolate btn-press"
-      onPointerDown={() => haptic()}
+      onTouchStart={() => haptic()}
     >
       <PulsingBorder
         className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0"
@@ -526,7 +527,7 @@ function EmailSignup() {
             type="submit"
             disabled={status === 'loading'}
             className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-5 pl-5 bg-black/25 isolate shrink-0 btn-press"
-            onPointerDown={() => haptic()}
+            onTouchStart={() => haptic()}
           >
             <PulsingBorder
               className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0"
@@ -610,7 +611,7 @@ function Footer() {
             target={href.startsWith('http') || newTab ? '_blank' : undefined}
             rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
             className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
-            onPointerDown={() => haptic()}
+            onTouchStart={() => haptic()}
           >
             {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
           </a>
@@ -624,7 +625,7 @@ function Footer() {
       </div>
       {/* Bottom row: BI logo left · copyright right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-0">
-        <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer" onPointerDown={() => haptic()}>
+        <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer" onTouchStart={() => haptic()}>
           <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-8 md:h-9 w-auto opacity-60 hover:opacity-100 transition-opacity" />
         </a>
         <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 md:text-right max-w-[480px]">

@@ -2,28 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-react'
 import { useLang } from '../i18n'
 import { CosmoLogo } from '../CosmoLogo'
-/* ─── Haptic feedback ───────────────────────────────────────────────────────
-   Android: navigator.vibrate
-   iOS:     <input switch> programmatic click — positioned off-screen so it is
-            real in the layout tree; pointer-events:none + opacity:0 can cause
-            WebKit to skip the haptic even for programmatic .click() calls
-   ─────────────────────────────────────────────────────────────────────── */
-let _hapticEl = null
-function haptic() {
-  if (typeof navigator === 'undefined') return
-  if (navigator.vibrate) {
-    navigator.vibrate(10)
-    return
-  }
-  if (!_hapticEl) {
-    _hapticEl = document.createElement('input')
-    _hapticEl.type = 'checkbox'
-    _hapticEl.setAttribute('switch', '')
-    _hapticEl.style.cssText = 'position:fixed;left:-200px;top:-200px;'
-    document.body.appendChild(_hapticEl)
-  }
-  _hapticEl.click()
-}
+import { useWebHaptics } from 'web-haptics/react'
 
 /* ─── Returns true once element has scrolled fully out of viewport ─── */
 function useScrolledPast() {
@@ -267,13 +246,14 @@ function HeatmapSteamIcon() {
 /* ─── Shared Steam Wishlist Button (hero + CTA) ─── */
 function SteamWishlistButton() {
   const { t } = useLang()
+  const haptic = useWebHaptics()
   return (
     <a
       href={STEAM_URL}
       target="_blank"
       rel="noopener noreferrer"
       className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-3.5 pl-1 bg-black/25 isolate btn-press"
-      onTouchStart={() => haptic()}
+      onClick={() => haptic.trigger('medium')}
     >
       <PulsingBorder
         className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0"
@@ -467,6 +447,7 @@ function Trailer() {
 function EmailSignup() {
   const fadeRef = useReveal()
   const { t } = useLang()
+  const haptic = useWebHaptics()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [message, setMessage] = useState('')
@@ -485,16 +466,16 @@ function EmailSignup() {
         setStatus('success')
         setMessage(t.emailSuccess)
         setEmail('')
-        haptic()
+        haptic.trigger('success')
       } else {
         setStatus('error')
         setMessage(data.error || t.emailError)
-        haptic()
+        haptic.trigger('error')
       }
     } catch {
       setStatus('error')
       setMessage(t.emailNetworkError)
-      haptic()
+      haptic.trigger('error')
     }
   }
 
@@ -527,7 +508,7 @@ function EmailSignup() {
             type="submit"
             disabled={status === 'loading'}
             className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-5 pl-5 bg-black/25 isolate shrink-0 btn-press"
-            onTouchStart={() => haptic()}
+            onClick={() => haptic.trigger('medium')}
           >
             <PulsingBorder
               className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0"
@@ -594,6 +575,7 @@ function CtaSection() {
    ═══════════════════════════════════════════ */
 function Footer() {
   const { lang, setLang, t } = useLang()
+  const haptic = useWebHaptics()
   return (
     <footer className="flex flex-col items-center w-full px-5 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 gap-5 md:gap-6" style={{ boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.06), inset 0 1px 4px 0 rgba(0,0,0,0.15)' }}>
       {/* Nav links row */}
@@ -611,13 +593,13 @@ function Footer() {
             target={href.startsWith('http') || newTab ? '_blank' : undefined}
             rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
             className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
-            onTouchStart={() => haptic()}
+            onClick={() => haptic.trigger('light')}
           >
             {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
           </a>
         ))}
         <button
-          onClick={() => { haptic(); setLang(lang === 'cs' ? 'en' : 'cs') }}
+          onClick={() => { haptic.trigger('selection'); setLang(lang === 'cs' ? 'en' : 'cs') }}
           className="text-[13px] leading-4 text-white transition-colors cursor-pointer link-reveal md:ml-auto"
         >
           {t.langSwitch}
@@ -625,7 +607,7 @@ function Footer() {
       </div>
       {/* Bottom row: BI logo left · copyright right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-0">
-        <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer" onTouchStart={() => haptic()}>
+        <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer" onClick={() => haptic.trigger('light')}>
           <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-8 md:h-9 w-auto opacity-60 hover:opacity-100 transition-opacity" />
         </a>
         <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 md:text-right max-w-[480px]">

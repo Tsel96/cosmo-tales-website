@@ -996,7 +996,7 @@ export default function Home() {
           }}
         />
         {/* Content row */}
-        <div className="relative flex items-center justify-between px-4 pt-4 md:px-5 md:pt-12 2xl:px-12 pointer-events-auto">
+        <div className="relative flex items-center justify-between px-4 pt-4 md:pl-5 md:pr-12 md:pt-12 2xl:px-12 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
           <div
             style={{

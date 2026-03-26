@@ -508,6 +508,7 @@ function EmailSignup() {
             type="submit"
             disabled={status === 'loading'}
             className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-5 pl-5 bg-black/25 isolate shrink-0 btn-press"
+            onClick={(e) => { if (!e.currentTarget.closest('form').checkValidity()) haptic.trigger('error') }}
           >
             <PulsingBorder
               className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0"

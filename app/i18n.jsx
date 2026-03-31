@@ -125,10 +125,8 @@ const translations = {
   },
 }
 
-const getCookie = (name) => {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
-  return match ? match[2] : null
-}
+const getCookie = (name) =>
+  document.cookie.split('; ').find((c) => c.startsWith(name + '='))?.split('=')[1] ?? null
 
 const LangContext = createContext()
 
@@ -155,7 +153,8 @@ export function LangProvider({ children }) {
     setLangState(l)
     localStorage.setItem('lang', l)
     // Cookie prevents middleware from overriding a manual choice
-    document.cookie = `lang=${l}; path=/; max-age=31536000; SameSite=Lax`
+    const secure = location.protocol === 'https:' ? '; Secure' : ''
+    document.cookie = `lang=${l}; path=/; max-age=31536000; SameSite=Lax${secure}`
   }, [])
 
   const value = useMemo(() => ({ lang, setLang, t: translations[lang] }), [lang, setLang])

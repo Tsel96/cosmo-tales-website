@@ -243,6 +243,20 @@ function HeatmapSteamIcon() {
   )
 }
 
+/* ─── Language toggle button ─── */
+function LangSwitch() {
+  const { lang, setLang, t } = useLang()
+  const haptic = useWebHaptics()
+  return (
+    <button
+      onClick={() => { haptic.trigger('selection'); setLang(lang === 'cs' ? 'en' : 'cs') }}
+      className="text-[13px] leading-4 text-white cursor-pointer link-reveal"
+    >
+      {t.langSwitch}
+    </button>
+  )
+}
+
 /* ─── Shared Steam Wishlist Button (hero + CTA) ─── */
 function SteamWishlistButton() {
   const { t } = useLang()
@@ -578,8 +592,8 @@ function CtaSection() {
 /* ═══════════════════════════════════════════
    FOOTER
    ═══════════════════════════════════════════ */
-function Footer() {
-  const { lang, setLang, t } = useLang()
+function Footer({ pastHero }) {
+  const { t } = useLang()
   const haptic = useWebHaptics()
   return (
     <footer className="flex flex-col items-center w-full px-5 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 gap-5 md:gap-6" style={{ boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.06), inset 0 1px 4px 0 rgba(0,0,0,0.15)' }}>
@@ -603,12 +617,7 @@ function Footer() {
             {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
           </a>
         ))}
-        <button
-          onClick={() => { haptic.trigger('selection'); setLang(lang === 'cs' ? 'en' : 'cs') }}
-          className="text-[13px] leading-4 text-white transition-colors cursor-pointer link-reveal md:ml-auto"
-        >
-          {t.langSwitch}
-        </button>
+        {!pastHero && <span className="md:ml-auto"><LangSwitch /></span>}
       </div>
       {/* Bottom row: BI logo left · copyright right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-0">
@@ -1019,6 +1028,7 @@ export default function Home() {
         <div className="relative flex items-center justify-between px-4 pt-4 md:pl-5 md:pr-12 md:pt-12 2xl:px-12 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
           <div
+            className="flex items-center gap-4"
             style={{
               opacity: pastHero ? 1 : 0,
               transform: pastHero ? 'translateY(0)' : 'translateY(-8px)',
@@ -1027,6 +1037,7 @@ export default function Home() {
               pointerEvents: pastHero ? 'auto' : 'none',
             }}
           >
+            <LangSwitch />
             <SteamWishlistButton />
           </div>
         </div>
@@ -1042,7 +1053,7 @@ export default function Home() {
       <Trailer />
       <EmailSignup />
       <CtaSection />
-      <Footer />
+      <Footer pastHero={pastHero} />
     </div>
   )
 }

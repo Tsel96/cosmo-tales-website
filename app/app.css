@@ -2,13 +2,18 @@
 
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-heading: "ff-folk-rough", "Inter Tight", "Inter", system-ui, sans-serif;
+  --font-heading: "sway-variable", sans-serif;
   --font-eyebrow: "sway-variable", sans-serif;
   --color-space-950: #030712;
   --color-space-900: #050A1A;
   --color-space-800: #0A1128;
   --color-accent: #4DC9F6;
   --color-visited: #9083C4;
+}
+
+/* Sway Variable — Black weight, fully constrained axis */
+.font-heading {
+  font-variation-settings: 'CNST' 100, 'wght' 900;
 }
 
 @keyframes levitate {

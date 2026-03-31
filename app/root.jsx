@@ -20,7 +20,7 @@ export const links = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;900&family=Inter:opsz,wght@14..32,400;14..32,600&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700&family=Inter:opsz,wght@14..32,400;14..32,600&display=swap",
   },
   {
     rel: "stylesheet",

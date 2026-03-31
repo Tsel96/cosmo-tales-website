@@ -2,7 +2,7 @@
 
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-heading: "sway-variable", sans-serif;
+  --font-heading: "ff-folk", sans-serif;
   --font-eyebrow: "sway-variable", sans-serif;
   --color-space-950: #030712;
   --color-space-900: #050A1A;
@@ -11,9 +11,9 @@
   --color-visited: #9083C4;
 }
 
-/* Sway Variable — Black weight, max contrast, uppercase */
+/* Folk OT Regular — display weight, uppercase */
 .font-heading {
-  font-variation-settings: 'CNST' 100, 'wght' 900;
+  font-weight: 400;
   text-transform: uppercase;
 }
 

@@ -51,7 +51,7 @@ function SplitWords({ children, className = '', staggerStart = 1 }) {
   const words = String(children).split(/\s+/)
   return words.map((word, i) => (
     <span
-      key={i}
+      key={`${word}-${i}`}
       className={`inline-block animate-enter ${className}`}
       style={{ '--stagger': staggerStart + i }}
     >
@@ -319,7 +319,7 @@ function getFeatures(t) {
 function FeatureCard({ video, title, desc, reverse }) {
   const cardRef = useReveal(0.25)
   const tiltRef = useRef(null)
-  const canHover = window.matchMedia('(hover: hover)').matches
+  const [canHover] = useState(() => window.matchMedia('(hover: hover)').matches)
 
   const handleMouseMove = (e) => {
     if (!canHover) return
@@ -455,12 +455,16 @@ function EmailSignup() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('loading')
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 10000)
     try {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
+        signal: controller.signal,
       })
+      clearTimeout(timeout)
       const data = await res.json()
       if (res.ok) {
         setStatus('success')
@@ -473,6 +477,7 @@ function EmailSignup() {
         haptic.trigger('error')
       }
     } catch {
+      clearTimeout(timeout)
       setStatus('error')
       setMessage(t.emailNetworkError)
       haptic.trigger('error')
@@ -618,6 +623,8 @@ function Footer() {
   )
 }
 
+const STAR_DENSITY = 2200 // px² per star — increase to reduce star count
+
 /* ─── Fixed starfield background ─── */
 function StarField() {
   const canvasRef = useRef(null)
@@ -627,7 +634,8 @@ function StarField() {
     const ctx = canvas.getContext('2d')
     const stars = []
     const meteors = []
-    let meteorTimer = Math.floor(Math.random() * 300 + 200)
+    // Time-based meteor timer (ms) so rate is frame-rate independent
+    let meteorTimer = Math.random() * 1667 + 3333 // 3.3–5 s
 
     // smooth easeInOut for blink curve
     const ease = (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
@@ -636,7 +644,7 @@ function StarField() {
       canvas.width  = window.innerWidth
       canvas.height = window.innerHeight
       stars.length  = 0
-      const count = Math.floor((canvas.width * canvas.height) / 2200)
+      const count = Math.floor((canvas.width * canvas.height) / STAR_DENSITY)
       for (let i = 0; i < count; i++) {
         const base = Math.random() * 0.5 + 0.15
         stars.push({
@@ -664,8 +672,10 @@ function StarField() {
     }
     init()
 
-    let raf, frame = 0
-    const draw = () => {
+    let raf, frame = 0, prevTime = 0
+    const draw = (now = 0) => {
+      const dt = prevTime ? now - prevTime : 0
+      prevTime = now
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       frame++
 
@@ -703,7 +713,7 @@ function StarField() {
         ctx.fill()
       }
       // ─── Meteor spawning ───
-      meteorTimer--
+      meteorTimer -= dt
       if (meteorTimer <= 0) {
         const angle  = (Math.random() * 15 + 25) * (Math.PI / 180) // 25–40°
         const speed  = Math.random() * 7 + 7                        // 7–14 px/frame
@@ -719,7 +729,7 @@ function StarField() {
           maxLife: Math.ceil((canvas.width + canvas.height) / speed * 1.1),
           hue:     Math.random() < 0.18 ? 195 : 218,
         })
-        meteorTimer = Math.floor(Math.random() * 480 + 320) // ~5–13 s at 60 fps
+        meteorTimer = Math.random() * 2667 + 5333 // 5.3–8 s
       }
 
       // ─── Draw meteors ───

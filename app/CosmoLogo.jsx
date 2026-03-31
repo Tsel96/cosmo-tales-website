@@ -19,20 +19,30 @@ function eyeOffset(center, cursor) {
 
 export function CosmoLogo({ className = '' }) {
   const svgRef = useRef(null)
+  const rectRef = useRef(null)
   const [cursor, setCursor] = useState(null)
 
   useEffect(() => {
+    const svg = svgRef.current
+    if (!svg) return
+
+    const updateRect = () => { rectRef.current = svg.getBoundingClientRect() }
+    updateRect()
+    window.addEventListener('resize', updateRect, { passive: true })
+
     function onMouseMove(e) {
-      const svg = svgRef.current
-      if (!svg) return
-      const { left, top, width, height } = svg.getBoundingClientRect()
+      const rect = rectRef.current
+      if (!rect) return
       setCursor({
-        x: ((e.clientX - left) / width) * VIEWBOX_W,
-        y: ((e.clientY - top) / height) * VIEWBOX_H,
+        x: ((e.clientX - rect.left) / rect.width) * VIEWBOX_W,
+        y: ((e.clientY - rect.top) / rect.height) * VIEWBOX_H,
       })
     }
     window.addEventListener('mousemove', onMouseMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMouseMove)
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('resize', updateRect)
+    }
   }, [])
 
   const leftOffset = eyeOffset(LEFT_EYE, cursor)

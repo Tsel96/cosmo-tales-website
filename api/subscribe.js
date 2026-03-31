@@ -4,13 +4,14 @@
  * Environment variables required:
  *   MAILCHIMP_API_KEY  — Mailchimp API key (e.g. "abc123-us21")
  *   MAILCHIMP_LIST_ID  — Audience / list ID (e.g. "a1b2c3d4e5")
- *
- * Deploy: push to Vercel and it auto-detects /api/*.js as serverless functions.
+ *   FRONTEND_URL       — Production origin (e.g. "https://cosmotales.com")
  */
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
 export default async function handler(req, res) {
-  // CORS headers (allow the frontend origin)
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  const origin = process.env.FRONTEND_URL || ''
+  res.setHeader('Access-Control-Allow-Origin', origin || 'null')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
   }
 
   const { email } = req.body || {}
-  if (!email || !email.includes('@')) {
+  if (!email || !EMAIL_RE.test(email)) {
     return res.status(400).json({ error: 'Valid email is required.' })
   }
 
@@ -32,10 +33,16 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server misconfigured.' })
   }
 
-  // Data-center is the suffix after the dash in the API key
   const DC = API_KEY.split('-')[1]
+  if (!DC) {
+    console.error('Malformed MAILCHIMP_API_KEY — expected format: <key>-<datacenter>')
+    return res.status(500).json({ error: 'Server misconfigured.' })
+  }
 
   try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
+
     const mcRes = await fetch(
       `https://${DC}.api.mailchimp.com/3.0/lists/${LIST_ID}/members`,
       {
@@ -48,10 +55,12 @@ export default async function handler(req, res) {
           email_address: email,
           status: 'subscribed',
         }),
+        signal: controller.signal,
       }
     )
+    clearTimeout(timeout)
 
-    const data = await mcRes.json()
+    const data = await mcRes.json().catch(() => ({}))
 
     if (mcRes.ok) {
       return res.status(200).json({ success: true })

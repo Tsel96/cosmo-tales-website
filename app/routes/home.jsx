@@ -243,6 +243,20 @@ function HeatmapSteamIcon() {
   )
 }
 
+/* ─── Language toggle button ─── */
+function LangSwitch() {
+  const { lang, setLang, t } = useLang()
+  const haptic = useWebHaptics()
+  return (
+    <button
+      onClick={() => { haptic.trigger('selection'); setLang(lang === 'cs' ? 'en' : 'cs') }}
+      className="text-[13px] leading-4 text-white cursor-pointer link-reveal opacity-100 hover:opacity-60 transition-opacity"
+    >
+      {t.langSwitch}
+    </button>
+  )
+}
+
 /* ─── Shared Steam Wishlist Button (hero + CTA) ─── */
 function SteamWishlistButton() {
   const { t } = useLang()
@@ -579,7 +593,7 @@ function CtaSection() {
    FOOTER
    ═══════════════════════════════════════════ */
 function Footer() {
-  const { lang, setLang, t } = useLang()
+  const { t } = useLang()
   const haptic = useWebHaptics()
   return (
     <footer className="flex flex-col items-center w-full px-5 md:px-12 pt-8 md:pt-10 pb-8 md:pb-12 gap-5 md:gap-6" style={{ boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.06), inset 0 1px 4px 0 rgba(0,0,0,0.15)' }}>
@@ -603,21 +617,21 @@ function Footer() {
             {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
           </a>
         ))}
-        <button
-          onClick={() => { haptic.trigger('selection'); setLang(lang === 'cs' ? 'en' : 'cs') }}
-          className="text-[13px] leading-4 text-white transition-colors cursor-pointer link-reveal md:ml-auto"
-        >
-          {t.langSwitch}
-        </button>
+        <span className="md:ml-auto"><LangSwitch /></span>
       </div>
-      {/* Bottom row: BI logo left · copyright right */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-0">
-        <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer" onClick={() => haptic.trigger('light')}>
-          <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-8 md:h-9 w-auto opacity-60 hover:opacity-100 transition-opacity" />
-        </a>
-        <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 md:text-right max-w-[480px]">
+      {/* Bottom row: copyright left · logos right */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-6">
+        <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 max-w-[480px]">
           &copy; 2026 BOHEMIA INTERACTIVE a.s. Cosmo Tales&reg; and BOHEMIA INTERACTIVE&reg; are registered trademarks of BOHEMIA INTERACTIVE a.s. All rights reserved.
         </p>
+        <div className="flex items-center gap-5 shrink-0">
+          <a href={STEAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => haptic.trigger('light')}>
+            <img src="/SteamLogo.svg" alt="Steam" className="h-7 md:h-8 w-auto opacity-100 hover:opacity-60 transition-opacity" />
+          </a>
+          <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer" onClick={() => haptic.trigger('light')}>
+            <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-8 md:h-9 w-auto opacity-100 hover:opacity-60 transition-opacity" />
+          </a>
+        </div>
       </div>
     </footer>
   )
@@ -1018,16 +1032,27 @@ export default function Home() {
         {/* Content row */}
         <div className="relative flex items-center justify-between px-4 pt-4 md:pl-5 md:pr-12 md:pt-12 2xl:px-12 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
-          <div
-            style={{
-              opacity: pastHero ? 1 : 0,
-              transform: pastHero ? 'translateY(0)' : 'translateY(-8px)',
-              filter: pastHero ? 'blur(0px)' : 'blur(5px)',
-              transition: 'opacity 500ms var(--ease-spring), transform 500ms var(--ease-spring), filter 500ms var(--ease-spring)',
-              pointerEvents: pastHero ? 'auto' : 'none',
-            }}
-          >
-            <SteamWishlistButton />
+          <div className="flex items-center gap-4">
+            <div
+              style={{
+                opacity: pastHero ? 0 : 1,
+                transition: 'opacity 500ms var(--ease-spring)',
+                pointerEvents: pastHero ? 'none' : 'auto',
+              }}
+            >
+              <LangSwitch />
+            </div>
+            <div
+              style={{
+                opacity: pastHero ? 1 : 0,
+                transform: pastHero ? 'translateY(0)' : 'translateY(-8px)',
+                filter: pastHero ? 'blur(0px)' : 'blur(5px)',
+                transition: 'opacity 500ms var(--ease-spring), transform 500ms var(--ease-spring), filter 500ms var(--ease-spring)',
+                pointerEvents: pastHero ? 'auto' : 'none',
+              }}
+            >
+              <SteamWishlistButton />
+            </div>
           </div>
         </div>
       </div>

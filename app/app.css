@@ -2,7 +2,7 @@
 
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-heading: "sway-variable", system-ui, sans-serif;
+  --font-heading: "sway-variable", "Inter Tight", system-ui, sans-serif;
   --font-eyebrow: "sway-variable", sans-serif;
   --color-space-950: #030712;
   --color-space-900: #050A1A;

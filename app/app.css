@@ -11,9 +11,9 @@
   --color-visited: #9083C4;
 }
 
-/* Sway Variable — Black weight, fully constrained axis */
+/* Sway Variable — Black weight */
 .font-heading {
-  font-variation-settings: 'CNST' 100, 'wght' 900;
+  font-weight: 900;
 }
 
 @keyframes levitate {

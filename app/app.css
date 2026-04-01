@@ -131,10 +131,16 @@
   a:visited {
     color: var(--color-visited);
   }
-  /* Direct rule so SVG currentColor resolves to visited color
-     (color doesn't inherit to children of :visited links) */
-  a:visited svg {
-    color: var(--color-visited);
+  /* Arrow icon as CSS mask — :visited can change background-color,
+     so the arrow inherits visited color naturally */
+  .external-arrow {
+    background-color: currentColor;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M11.9993 10V4M11.9993 4H5.99935M11.9993 4L4.16602 11.8333' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M11.9993 10V4M11.9993 4H5.99935M11.9993 4L4.16602 11.8333' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
   }
   h1, h2, h3 {
     text-wrap: balance;

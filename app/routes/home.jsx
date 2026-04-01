@@ -1028,7 +1028,7 @@ export default function Home() {
           }}
         />
         {/* Content row */}
-        <div className="relative flex items-center justify-between p-5 pointer-events-auto">
+        <div className="relative flex items-start justify-between p-5 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
           <div className="flex items-center gap-4">
             <div

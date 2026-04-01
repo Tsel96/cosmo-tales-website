@@ -337,17 +337,22 @@ const CONTENT = {
   },
 }
 
-/* ─── Table component ─── */
-function PolicyTable({ headers, rows }) {
+/* ─── Compact table for Appendix 1 (short provision codes) ─── */
+function DataTable({ headers, rows }) {
   return (
     <div className="overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0">
-      <table className="w-full text-[13px] md:text-[14px] leading-[20px] md:leading-[22px] border-collapse">
+      <table className="w-full text-[13px] md:text-[14px] leading-[20px] md:leading-[22px] border-collapse" style={{ tableLayout: 'fixed' }}>
+        <colgroup>
+          <col style={{ width: '100px' }} />
+          <col />
+          <col style={{ width: '180px' }} />
+        </colgroup>
         <thead>
           <tr>
             {headers.map((h, i) => (
               <th
                 key={i}
-                className="text-left text-white/60 font-semibold py-3 px-3 border-b border-white/10 first:pl-0 last:pr-0"
+                className="text-left text-white/60 font-semibold py-2.5 px-2.5 border-b border-white/10 first:pl-0 last:pr-0"
               >
                 {h}
               </th>
@@ -360,7 +365,9 @@ function PolicyTable({ headers, rows }) {
               {row.map((cell, j) => (
                 <td
                   key={j}
-                  className="py-3 px-3 text-[#8A95B0] align-top first:pl-0 last:pr-0 first:text-white/50 first:whitespace-nowrap first:font-mono first:text-[12px]"
+                  className={`py-2.5 px-2.5 text-[#8A95B0] align-top first:pl-0 last:pr-0 ${
+                    j === 0 ? 'text-white/50 font-mono text-[12px] whitespace-nowrap' : ''
+                  }`}
                 >
                   {cell}
                 </td>
@@ -369,6 +376,31 @@ function PolicyTable({ headers, rows }) {
           ))}
         </tbody>
       </table>
+    </div>
+  )
+}
+
+/* ─── Card layout for partner/affiliate tables (long text per entry) ─── */
+function PartnerCards({ headers, rows }) {
+  return (
+    <div className="flex flex-col gap-4">
+      {rows.map((row, i) => (
+        <div key={i} className="border border-white/[0.06] rounded-lg p-4 flex flex-col gap-2">
+          <p className="text-[13px] md:text-[14px] leading-[20px] text-white/70 font-semibold">
+            {row[0]}
+          </p>
+          {row.slice(1).map((cell, j) => (
+            <div key={j}>
+              <p className="text-[11px] md:text-[12px] text-white/30 uppercase tracking-wider font-semibold mb-0.5">
+                {headers[j + 1]}
+              </p>
+              <p className="text-[13px] md:text-[14px] leading-[20px] text-[#8A95B0]">
+                {cell}
+              </p>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   )
 }
@@ -461,7 +493,7 @@ export default function Privacy() {
             <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
               {t.appendix1.title}
             </h2>
-            <PolicyTable headers={t.appendix1.headers} rows={t.appendix1.rows} />
+            <DataTable headers={t.appendix1.headers} rows={t.appendix1.rows} />
           </section>
 
           {/* Appendix 2 */}
@@ -469,7 +501,7 @@ export default function Privacy() {
             <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
               {t.appendix2.title}
             </h2>
-            <PolicyTable headers={t.appendix2.headers} rows={t.appendix2.rows} />
+            <PartnerCards headers={t.appendix2.headers} rows={t.appendix2.rows} />
           </section>
 
           {/* Affiliates */}
@@ -477,7 +509,7 @@ export default function Privacy() {
             <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
               {t.affiliates.title}
             </h2>
-            <PolicyTable headers={t.affiliates.headers} rows={t.affiliates.rows} />
+            <PartnerCards headers={t.affiliates.headers} rows={t.affiliates.rows} />
           </section>
         </div>
       </main>

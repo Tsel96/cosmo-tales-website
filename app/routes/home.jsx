@@ -77,12 +77,10 @@ const STEAM_ICON_URL = ASSETS + '01KJSGM5CCA1ZVHYDWH64816GQ.png'
 const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='
 const STEAM_URL = 'https://store.steampowered.com/app/3601630/Cosmo_Tales/?l=czech'
 
-/* ─── External link arrow icon (marks links opening in new tab) ─── */
-function ExternalLinkIcon({ className = 'w-3 h-3' }) {
+/* ─── External link arrow icon (CSS mask so :visited color applies) ─── */
+function ExternalLinkIcon({ className = 'w-3.5 h-3.5' }) {
   return (
-    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M11.9993 10V4M11.9993 4H5.99935M11.9993 4L4.16602 11.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
+    <span className={`inline-block ${className} external-arrow`} aria-hidden="true" />
   )
 }
 

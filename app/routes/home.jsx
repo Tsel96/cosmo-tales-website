@@ -619,7 +619,7 @@ function Footer() {
       </div>
       {/* Bottom row: copyright left · logos right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-6">
-        <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 max-w-[480px]">
+        <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white max-w-[480px]">
           &copy; 2026 BOHEMIA INTERACTIVE a.s. Cosmo Tales&reg; and BOHEMIA INTERACTIVE&reg; are registered trademarks of BOHEMIA INTERACTIVE a.s. All rights reserved.
         </p>
         <div className="flex items-center gap-5 shrink-0">

@@ -439,7 +439,7 @@ function Trailer() {
             style={{ clipPath: 'url(#videoMask)', aspectRatio: '1964 / 1119' }}
           >
             <iframe
-              src="https://www.youtube.com/embed/XsfETQ5cL8U?rel=0&modestbranding=1&controls=0&iv_load_policy=3&showinfo=0"
+              src="https://www.youtube-nocookie.com/embed/XsfETQ5cL8U?rel=0&modestbranding=1&controls=0&iv_load_policy=3&showinfo=0"
               title="Cosmo Tales — Official Trailer"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
@@ -619,7 +619,7 @@ function Footer() {
       </div>
       {/* Bottom row: copyright left · logos right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-6">
-        <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 max-w-[480px]">
+        <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white max-w-[480px]">
           &copy; 2026 BOHEMIA INTERACTIVE a.s. Cosmo Tales&reg; and BOHEMIA INTERACTIVE&reg; are registered trademarks of BOHEMIA INTERACTIVE a.s. All rights reserved.
         </p>
         <div className="flex items-center gap-5 shrink-0">

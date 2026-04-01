@@ -439,7 +439,7 @@ function Trailer() {
             style={{ clipPath: 'url(#videoMask)', aspectRatio: '1964 / 1119' }}
           >
             <iframe
-              src="https://www.youtube.com/embed/XsfETQ5cL8U?rel=0&modestbranding=1&controls=0&iv_load_policy=3&showinfo=0"
+              src="https://www.youtube-nocookie.com/embed/XsfETQ5cL8U?rel=0&modestbranding=1&controls=0&iv_load_policy=3&showinfo=0"
               title="Cosmo Tales — Official Trailer"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen

@@ -264,7 +264,7 @@ function SteamWishlistButton() {
       href={STEAM_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-2.5 pl-1 bg-black/25 isolate btn-press"
+      className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-3.5 pl-1 bg-black/25 isolate btn-press"
       onClick={() => haptic.trigger('medium')}
     >
       <PulsingBorder
@@ -1028,9 +1028,9 @@ export default function Home() {
           }}
         />
         {/* Content row */}
-        <div className="relative flex items-start justify-between p-5 pointer-events-auto">
+        <div className="relative flex items-start justify-between pt-5 pl-5 pr-3 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
-          <div className="flex items-center gap-4 mt-0.5 mr-0.5">
+          <div className="flex items-center gap-4">
             <div
               style={{
                 opacity: pastHero ? 1 : 0,

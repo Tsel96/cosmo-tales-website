@@ -275,7 +275,7 @@ function SteamWishlistButton() {
     >
       <PulsingBorder className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0" {...PULSING_BORDER_PROPS} />
       <HeatmapSteamIcon />
-      <span className="font-semibold text-base tracking-[-0.02em] text-white leading-5">
+      <span className="font-semibold text-[17pt] tracking-[-0.02em] text-white leading-5">
         {t.wishlistOnSteam}
       </span>
     </a>
@@ -506,7 +506,7 @@ function EmailSignup() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] text-white placeholder:text-muted text-base focus:outline-none input-glow"
+            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] text-white placeholder:text-muted text-[17pt] focus:outline-none input-glow"
             style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08), 0 1px 2px 0 rgba(0,0,0,0.2)' }}
           />
           <button
@@ -516,7 +516,7 @@ function EmailSignup() {
             onClick={(e) => { if (!e.currentTarget.closest('form').checkValidity()) haptic.trigger('error') }}
           >
             <PulsingBorder className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0" {...PULSING_BORDER_PROPS} />
-            <span className="font-semibold text-base tracking-[-0.02em] text-white leading-5 py-2.5">
+            <span className="font-semibold text-[17pt] tracking-[-0.02em] text-white leading-5 py-2.5">
               {status === 'loading' ? t.emailSending : t.emailButton}
             </span>
           </button>
@@ -588,7 +588,7 @@ function Footer() {
           href="/privacy"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal md:ml-auto"
+          className="inline-flex items-center gap-0.5 text-[15pt] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal md:ml-auto"
           onClick={() => haptic.trigger('light')}
         >
           {t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" />

@@ -264,7 +264,7 @@ function SteamWishlistButton() {
       href={STEAM_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-3.5 pl-1 bg-black/25 isolate btn-press"
+      className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-2.5 pl-1 bg-black/25 isolate btn-press"
       onClick={() => haptic.trigger('medium')}
     >
       <PulsingBorder

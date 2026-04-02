@@ -254,7 +254,7 @@ function LangSwitch() {
   return (
     <button
       onClick={() => { haptic.trigger('selection'); setLang(lang === 'cs' ? 'en' : 'cs') }}
-      className="text-[15pt] leading-5 text-white cursor-pointer link-reveal opacity-100 hover:opacity-60 transition-opacity"
+      className="text-[12pt] leading-5 text-white cursor-pointer link-reveal opacity-100 hover:opacity-60 transition-opacity"
     >
       {t.langSwitch}
     </button>
@@ -275,7 +275,7 @@ function SteamWishlistButton() {
     >
       <PulsingBorder className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0" {...PULSING_BORDER_PROPS} />
       <HeatmapSteamIcon />
-      <span className="font-semibold text-[17pt] tracking-[-0.02em] text-white leading-5">
+      <span className="font-semibold text-[14pt] tracking-[-0.02em] text-white leading-5">
         {t.wishlistOnSteam}
       </span>
     </a>
@@ -296,7 +296,7 @@ function Story() {
       <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 3 }}>
         {t.storyTitle}
       </h2>
-      <p className="animate-enter text-[17pt] leading-[26px] md:leading-[29px] text-muted text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
+      <p className="animate-enter text-[14pt] leading-[26px] md:leading-[29px] text-muted text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
         {t.storyText}
       </p>
     </section>
@@ -372,7 +372,7 @@ function FeatureCard({ video, title, desc, reverse }) {
         <h3 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] tracking-[-0.02em] text-white" style={{ '--stagger': 1 }}>
           {title}
         </h3>
-        <p className="animate-enter text-[17pt] leading-[24px] md:leading-[29px] text-muted" style={{ '--stagger': 2 }}>{desc}</p>
+        <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted" style={{ '--stagger': 2 }}>{desc}</p>
       </div>
     </div>
   )
@@ -492,7 +492,7 @@ function EmailSignup() {
       <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 4 }}>
         {t.emailTitle}
       </h2>
-      <p className="animate-enter text-[17pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
+      <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
         {t.emailText}
       </p>
 
@@ -506,7 +506,7 @@ function EmailSignup() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] text-white placeholder:text-muted text-[17pt] focus:outline-none input-glow"
+            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] text-white placeholder:text-muted text-[14pt] focus:outline-none input-glow"
             style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08), 0 1px 2px 0 rgba(0,0,0,0.2)' }}
           />
           <button
@@ -516,7 +516,7 @@ function EmailSignup() {
             onClick={(e) => { if (!e.currentTarget.closest('form').checkValidity()) haptic.trigger('error') }}
           >
             <PulsingBorder className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0" {...PULSING_BORDER_PROPS} />
-            <span className="font-semibold text-[17pt] tracking-[-0.02em] text-white leading-5 py-2.5">
+            <span className="font-semibold text-[14pt] tracking-[-0.02em] text-white leading-5 py-2.5">
               {status === 'loading' ? t.emailSending : t.emailButton}
             </span>
           </button>
@@ -547,7 +547,7 @@ function CtaSection() {
       <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
         {t.ctaTitle}
       </h2>
-      <p className="animate-enter text-[17pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
+      <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
         {t.ctaText}
       </p>
       <div className="animate-enter mt-6" style={{ '--stagger': 5 }}>
@@ -578,7 +578,7 @@ function Footer() {
             href={href}
             target={href.startsWith('http') || newTab ? '_blank' : undefined}
             rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
-            className="inline-flex items-center gap-0.5 text-[15pt] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
+            className="inline-flex items-center gap-0.5 text-[12pt] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
             onClick={() => haptic.trigger('light')}
           >
             {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
@@ -588,7 +588,7 @@ function Footer() {
           href="/privacy"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-0.5 text-[15pt] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal md:ml-auto"
+          className="inline-flex items-center gap-0.5 text-[12pt] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal md:ml-auto"
           onClick={() => haptic.trigger('light')}
         >
           {t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" />

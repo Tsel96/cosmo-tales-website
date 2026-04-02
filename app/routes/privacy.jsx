@@ -419,7 +419,7 @@ export default function Privacy() {
         </a>
         <a
           href={`/privacy?lang=${t.langSwitchParam}`}
-          className="text-[15pt] font-semibold text-accent hover:text-white transition-colors"
+          className="text-[12pt] font-semibold text-accent hover:text-white transition-colors"
         >
           {t.langSwitch}
         </a>
@@ -430,7 +430,7 @@ export default function Privacy() {
         <h1 className="font-heading font-bold text-[42pt] leading-[1.1] tracking-[-0.02em] text-white">
           {t.title}
         </h1>
-        <p className="text-[17pt] leading-[26px] md:leading-[29px] text-muted mt-3">
+        <p className="text-[14pt] leading-[26px] md:leading-[29px] text-muted mt-3">
           {t.effective}
         </p>
 
@@ -440,25 +440,25 @@ export default function Privacy() {
             <h2 className="font-heading font-bold text-[24pt] leading-[1.2] tracking-[-0.01em] text-white mb-3 md:mb-4">
               {t.intro.title}
             </h2>
-            <p className="text-[17pt] leading-[26px] md:leading-[29px] text-muted font-semibold mb-4">
+            <p className="text-[14pt] leading-[26px] md:leading-[29px] text-muted font-semibold mb-4">
               {t.intro.greeting}
             </p>
             {t.intro.paragraphs.map((p, i) => (
-              <p key={i} className="text-[17pt] leading-[26px] md:leading-[29px] text-muted mb-4">
+              <p key={i} className="text-[14pt] leading-[26px] md:leading-[29px] text-muted mb-4">
                 {p}
               </p>
             ))}
-            <p className="text-[14px] md:text-[15pt] leading-[24px] md:leading-[26px] text-white/50 font-semibold mt-4 mb-2">
+            <p className="text-[14px] md:text-[12pt] leading-[24px] md:leading-[26px] text-white/50 font-semibold mt-4 mb-2">
               {lang === 'en' ? 'A few key points:' : 'Několik hlavních bodů:'}
             </p>
             <ul className="flex flex-col gap-2 mb-4">
               {t.intro.keyPoints.map((point, i) => (
-                <li key={i} className="text-[17pt] leading-[26px] md:leading-[29px] text-muted pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-accent">
+                <li key={i} className="text-[14pt] leading-[26px] md:leading-[29px] text-muted pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-accent">
                   {point}
                 </li>
               ))}
             </ul>
-            <p className="text-[17pt] leading-[26px] md:leading-[29px] text-muted">
+            <p className="text-[14pt] leading-[26px] md:leading-[29px] text-muted">
               {t.intro.contact}
             </p>
           </section>
@@ -471,16 +471,16 @@ export default function Privacy() {
               </h2>
               {s.subsections?.map((sub, i) => (
                 <div key={i} className="mb-4">
-                  <h3 className="text-[17pt] leading-[26px] md:leading-[29px] text-white/60 font-semibold mb-1">
+                  <h3 className="text-[14pt] leading-[26px] md:leading-[29px] text-white/60 font-semibold mb-1">
                     {sub.subtitle}
                   </h3>
-                  <p className="text-[17pt] leading-[26px] md:leading-[29px] text-muted">
+                  <p className="text-[14pt] leading-[26px] md:leading-[29px] text-muted">
                     {sub.text}
                   </p>
                 </div>
               ))}
               {s.items?.map((item, i) => (
-                <p key={i} className="text-[17pt] leading-[26px] md:leading-[29px] text-muted whitespace-pre-line mb-3 last:mb-0">
+                <p key={i} className="text-[14pt] leading-[26px] md:leading-[29px] text-muted whitespace-pre-line mb-3 last:mb-0">
                   {item}
                 </p>
               ))}

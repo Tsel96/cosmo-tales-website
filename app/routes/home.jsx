@@ -264,7 +264,7 @@ function SteamWishlistButton() {
       href={STEAM_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-3.5 pl-1 bg-black/25 isolate btn-press"
+      className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-2.5 pl-1 bg-black/25 isolate btn-press"
       onClick={() => haptic.trigger('medium')}
     >
       <PulsingBorder
@@ -622,7 +622,7 @@ function Footer() {
         <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white max-w-[480px]">
           &copy; 2026 BOHEMIA INTERACTIVE a.s. Cosmo Tales&reg; and BOHEMIA INTERACTIVE&reg; are registered trademarks of BOHEMIA INTERACTIVE a.s. All rights reserved.
         </p>
-        <div className="flex items-center gap-5 shrink-0">
+        <div className="flex items-center gap-8 shrink-0">
           <a href={STEAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => haptic.trigger('light')}>
             <img src="/SteamLogo.svg" alt="Steam" className="h-7 md:h-8 w-auto opacity-100 hover:opacity-60 transition-opacity" />
           </a>
@@ -1030,7 +1030,7 @@ export default function Home() {
         {/* Content row */}
         <div className="relative flex items-start justify-between p-5 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mt-0.5 mr-0.5">
             <div
               style={{
                 opacity: pastHero ? 1 : 0,

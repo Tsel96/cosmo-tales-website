@@ -1,26 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 const VIEWBOX_W = 183
 const VIEWBOX_H = 135
 const LEFT_EYE = { x: 44.23, y: 50.5 }
 const RIGHT_EYE = { x: 155.64, y: 50.57 }
-const EYE_RADIUS = 5.178
 const MAX_OFFSET = 4.5
-
-function eyeOffset(center, cursor) {
-  if (!cursor) return { x: 0, y: 0 }
-  const dx = cursor.x - center.x
-  const dy = cursor.y - center.y
-  const dist = Math.hypot(dx, dy)
-  if (dist === 0) return { x: 0, y: 0 }
-  const scale = Math.min(1, MAX_OFFSET / dist)
-  return { x: dx * scale, y: dy * scale }
-}
 
 export function CosmoLogo({ className = '' }) {
   const svgRef = useRef(null)
+  const leftEyeRef = useRef(null)
+  const rightEyeRef = useRef(null)
   const rectRef = useRef(null)
-  const [cursor, setCursor] = useState(null)
 
   useEffect(() => {
     const svg = svgRef.current
@@ -33,10 +23,17 @@ export function CosmoLogo({ className = '' }) {
     function onMouseMove(e) {
       const rect = rectRef.current
       if (!rect) return
-      setCursor({
-        x: ((e.clientX - rect.left) / rect.width) * VIEWBOX_W,
-        y: ((e.clientY - rect.top) / rect.height) * VIEWBOX_H,
-      })
+      const cx = ((e.clientX - rect.left) / rect.width) * VIEWBOX_W
+      const cy = ((e.clientY - rect.top) / rect.height) * VIEWBOX_H
+
+      for (const [eye, ref] of [[LEFT_EYE, leftEyeRef], [RIGHT_EYE, rightEyeRef]]) {
+        const dx = cx - eye.x, dy = cy - eye.y
+        const dist = Math.hypot(dx, dy)
+        const scale = dist === 0 ? 0 : Math.min(1, MAX_OFFSET / dist)
+        if (ref.current) {
+          ref.current.style.transform = `translate(${dx * scale}px, ${dy * scale}px)`
+        }
+      }
     }
     window.addEventListener('mousemove', onMouseMove, { passive: true })
     return () => {
@@ -44,9 +41,6 @@ export function CosmoLogo({ className = '' }) {
       window.removeEventListener('resize', updateRect)
     }
   }, [])
-
-  const leftOffset = eyeOffset(LEFT_EYE, cursor)
-  const rightOffset = eyeOffset(RIGHT_EYE, cursor)
 
   return (
     <svg
@@ -105,18 +99,12 @@ export function CosmoLogo({ className = '' }) {
         fill="white"
       />
 
-      {/* Eyes with cursor tracking */}
-      <g
-        transform={`translate(${leftOffset.x} ${leftOffset.y})`}
-        style={{ transition: 'transform 0.08s ease-out' }}
-      >
-        <circle cx={LEFT_EYE.x} cy={LEFT_EYE.y} r={EYE_RADIUS} fill="white" />
+      {/* Eyes with cursor tracking — DOM-mutated via refs, no re-renders */}
+      <g ref={leftEyeRef} style={{ transition: 'transform 0.08s ease-out' }}>
+        <circle cx={LEFT_EYE.x} cy={LEFT_EYE.y} r="5.178" fill="white" />
       </g>
-      <g
-        transform={`translate(${rightOffset.x} ${rightOffset.y})`}
-        style={{ transition: 'transform 0.08s ease-out' }}
-      >
-        <circle cx={RIGHT_EYE.x} cy={RIGHT_EYE.y} r={EYE_RADIUS} fill="white" />
+      <g ref={rightEyeRef} style={{ transition: 'transform 0.08s ease-out' }}>
+        <circle cx={RIGHT_EYE.x} cy={RIGHT_EYE.y} r="5.178" fill="white" />
       </g>
     </svg>
   )

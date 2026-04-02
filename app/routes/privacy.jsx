@@ -1,6 +1,5 @@
 import { useSearchParams } from 'react-router'
 
-const ASSETS = 'https://workers.paper.design/file-assets/01KJPX5MQYW5WMXDR20PGMHFVR/'
 const LOGO_URL = '/CosmoLogo.svg'
 
 export function meta() {
@@ -365,7 +364,7 @@ function DataTable({ headers, rows }) {
               {row.map((cell, j) => (
                 <td
                   key={j}
-                  className={`py-2.5 px-2.5 text-[#8A95B0] align-top first:pl-0 last:pr-0 ${
+                  className={`py-2.5 px-2.5 text-muted align-top first:pl-0 last:pr-0 ${
                     j === 0 ? 'text-white/50 font-mono text-[12px] whitespace-nowrap' : ''
                   }`}
                 >
@@ -394,7 +393,7 @@ function PartnerCards({ headers, rows }) {
               <p className="text-[11px] md:text-[12px] text-white/30 uppercase tracking-wider font-semibold mb-0.5">
                 {headers[j + 1]}
               </p>
-              <p className="text-[13px] md:text-[14px] leading-[20px] text-[#8A95B0]">
+              <p className="text-[13px] md:text-[14px] leading-[20px] text-muted">
                 {cell}
               </p>
             </div>
@@ -431,7 +430,7 @@ export default function Privacy() {
         <h1 className="font-heading font-bold text-[32px] md:text-[48px] leading-[1.1] tracking-[-0.02em] text-white">
           {t.title}
         </h1>
-        <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] mt-3">
+        <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted mt-3">
           {t.effective}
         </p>
 
@@ -441,11 +440,11 @@ export default function Privacy() {
             <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-3 md:mb-4">
               {t.intro.title}
             </h2>
-            <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] font-semibold mb-4">
+            <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted font-semibold mb-4">
               {t.intro.greeting}
             </p>
             {t.intro.paragraphs.map((p, i) => (
-              <p key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] mb-4">
+              <p key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted mb-4">
                 {p}
               </p>
             ))}
@@ -454,12 +453,12 @@ export default function Privacy() {
             </p>
             <ul className="flex flex-col gap-2 mb-4">
               {t.intro.keyPoints.map((point, i) => (
-                <li key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-accent">
+                <li key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-accent">
                   {point}
                 </li>
               ))}
             </ul>
-            <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0]">
+            <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted">
               {t.intro.contact}
             </p>
           </section>
@@ -475,13 +474,13 @@ export default function Privacy() {
                   <h3 className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-white/60 font-semibold mb-1">
                     {sub.subtitle}
                   </h3>
-                  <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0]">
+                  <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted">
                     {sub.text}
                   </p>
                 </div>
               ))}
               {s.items?.map((item, i) => (
-                <p key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] whitespace-pre-line mb-3 last:mb-0">
+                <p key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted whitespace-pre-line mb-3 last:mb-0">
                   {item}
                 </p>
               ))}

@@ -9,12 +9,12 @@
   --color-space-800: #0A1128;
   --color-accent: #4DC9F6;
   --color-visited: #9083C4;
+  --color-muted: #8A95B0;
 }
 
-/* Sway Variable — Black weight, max contrast, uppercase */
+/* Sway Variable — Black weight, max contrast */
 .font-heading {
   font-variation-settings: 'CNST' 100, 'wght' 900;
-  text-transform: uppercase;
 }
 
 @keyframes levitate {

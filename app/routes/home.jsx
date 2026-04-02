@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { HalftoneCmyk, PulsingBorder, Heatmap } from '@paper-design/shaders-react'
+import { PulsingBorder } from '@paper-design/shaders-react'
 import { useLang } from '../i18n'
 import { CosmoLogo } from '../CosmoLogo'
 import { useWebHaptics } from 'web-haptics/react'
@@ -73,23 +73,19 @@ const ASSETS = 'https://workers.paper.design/file-assets/01KJPX5MQYW5WMXDR20PGMH
 const SHIP_URL = ASSETS + '16BDY4JWN7S32GW0Y4J5X4YC1D.png'
 const HERO_BG_URL = '/hero-bg-hd.webp'
 const STEAM_ICON_URL = ASSETS + '01KJSGM5CCA1ZVHYDWH64816GQ.png'
-// 1x1 white pixel for ambient glow heatmap (no visible image pattern)
-const WHITE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='
 const STEAM_URL = 'https://store.steampowered.com/app/3601630/Cosmo_Tales/?l=czech'
+
+const PULSING_BORDER_PROPS = {
+  aspectRatio: 'auto', speed: 1, scale: 0.60, roundness: 1, softness: 0.75,
+  rotation: 0, thickness: 0.05, intensity: 0.20, bloom: 0.25, spots: 5,
+  spotSize: 0.50, pulse: 0.25, smoke: 0.30, smokeSize: 0.60,
+  colors: ['#5B00FF', '#AC00BF', '#0DC1FD'], colorBack: '#00000000',
+}
 
 /* ─── External link arrow icon (CSS mask so :visited color applies) ─── */
 function ExternalLinkIcon({ className = 'w-3.5 h-3.5' }) {
   return (
     <span className={`inline-block ${className} external-arrow`} aria-hidden="true" />
-  )
-}
-
-/* ─── Steam SVG Icon ─── */
-function SteamIcon({ className = 'w-5 h-5' }) {
-  return (
-    <svg className={className} viewBox="0 0 94 95" fill="none">
-      <path d="M46.639 0C22.075 0 1.927 19.105 0 43.428L25.046 53.864C27.133 52.419 29.701 51.536 32.511 51.536C32.752 51.536 32.993 51.536 33.233 51.536L44.392 35.24V34.999C44.392 25.206 52.339 17.179 62.052 17.179C71.765 17.179 79.712 25.126 79.712 34.999C79.712 44.793 71.765 52.82 62.052 52.82C61.891 52.82 61.811 52.82 61.65 52.82L45.756 64.299C45.756 64.54 45.756 64.701 45.756 64.942C45.756 72.327 39.816 78.267 32.511 78.267C26.089 78.267 20.711 73.611 19.507 67.51L1.605 60.045C7.144 79.873 25.206 94.402 46.639 94.402C72.487 94.402 93.439 73.29 93.439 47.201C93.359 21.112 72.407 0 46.639 0ZM29.3 71.604L23.52 69.196C24.564 71.364 26.33 73.13 28.658 74.093C33.715 76.18 39.575 73.772 41.662 68.715C42.706 66.226 42.706 63.497 41.662 61.008C40.619 58.52 38.772 56.593 36.284 55.55C33.876 54.506 31.227 54.586 28.979 55.469L34.919 57.958C38.612 59.563 40.378 63.818 38.853 67.591C37.327 71.444 33.073 73.21 29.3 71.604ZM73.772 34.999C73.772 28.497 68.474 23.119 62.052 23.119C55.55 23.119 50.332 28.417 50.332 34.999C50.332 41.502 55.63 46.88 62.052 46.88C68.554 46.88 73.772 41.582 73.772 34.999ZM53.222 34.999C53.222 30.103 57.155 26.089 62.052 26.089C66.948 26.089 70.882 30.103 70.882 34.999C70.882 39.896 66.948 43.91 62.052 43.91C57.155 43.91 53.222 39.896 53.222 34.999Z" fill="currentColor"/>
-    </svg>
   )
 }
 
@@ -99,48 +95,56 @@ function SteamIcon({ className = 'w-5 h-5' }) {
    ═══════════════════════════════════════════ */
 function Hero() {
   const { t } = useLang()
-  const heroRef      = useRef(null)
-  // Parallax: two separate lerp tracks at different speeds for depth
-  const bgTarget     = useRef({ x: 0, y: 0 })   // background (slow)
-  const bgCurrent    = useRef({ x: 0, y: 0 })
-  const fgTarget     = useRef({ x: 0, y: 0 })   // ship (faster)
-  const fgCurrent    = useRef({ x: 0, y: 0 })
-  const [bg, setBg]  = useState({ x: 0, y: 0 })
-  const [fg, setFg]  = useState({ x: 0, y: 0 })
-  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 767px)').matches)
+  const heroRef = useRef(null)
+  const bgRef   = useRef(null)
+  const fgRef   = useRef(null)
+  const isMobileRef = useRef(typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches)
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches)
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)')
-    const onChange = (e) => setIsMobile(e.matches)
+    const onChange = (e) => { isMobileRef.current = e.matches; setIsMobile(e.matches) }
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
   }, [])
 
   useEffect(() => {
-    let raf
+    const bgTarget  = { x: 0, y: 0 }, bgCur = { x: 0, y: 0 }
+    const fgTarget  = { x: 0, y: 0 }, fgCur = { x: 0, y: 0 }
+    const EPS = 0.05
+    let raf, running = false
+
     const lerp = (a, b, t) => a + (b - a) * t
     const tick = () => {
-      bgCurrent.current.x = lerp(bgCurrent.current.x, bgTarget.current.x, 0.035)
-      bgCurrent.current.y = lerp(bgCurrent.current.y, bgTarget.current.y, 0.035)
-      fgCurrent.current.x = lerp(fgCurrent.current.x, fgTarget.current.x, 0.055)
-      fgCurrent.current.y = lerp(fgCurrent.current.y, fgTarget.current.y, 0.055)
-      setBg({ x: bgCurrent.current.x, y: bgCurrent.current.y })
-      setFg({ x: fgCurrent.current.x, y: fgCurrent.current.y })
+      bgCur.x = lerp(bgCur.x, bgTarget.x, 0.035)
+      bgCur.y = lerp(bgCur.y, bgTarget.y, 0.035)
+      fgCur.x = lerp(fgCur.x, fgTarget.x, 0.055)
+      fgCur.y = lerp(fgCur.y, fgTarget.y, 0.055)
+
+      if (bgRef.current) bgRef.current.style.transform = `translate(${bgCur.x}px, ${bgCur.y}px)`
+      if (fgRef.current) fgRef.current.style.transform = `translate(calc(-50% + ${fgCur.x}px), calc(-50% + ${fgCur.y}px))`
+
+      // Stop the loop when values have settled
+      const settled = Math.abs(bgCur.x - bgTarget.x) < EPS && Math.abs(bgCur.y - bgTarget.y) < EPS
+        && Math.abs(fgCur.x - fgTarget.x) < EPS && Math.abs(fgCur.y - fgTarget.y) < EPS
+      if (settled) { running = false; return }
       raf = requestAnimationFrame(tick)
     }
-    raf = requestAnimationFrame(tick)
+    const startLoop = () => { if (!running) { running = true; raf = requestAnimationFrame(tick) } }
 
     const onMove = (e) => {
+      if (!heroRef.current) return
       const rect = heroRef.current.getBoundingClientRect()
-      // Normalize to -1 … +1 around center
       const nx = ((e.clientX - rect.left) / rect.width  - 0.5) * 2
       const ny = ((e.clientY - rect.top)  / rect.height - 0.5) * 2
-      bgTarget.current = { x: nx * -28, y: ny * -18 }   // counter-moves (deep)
-      fgTarget.current = { x: nx *  22, y: ny *  16 }   // co-moves (close)
+      bgTarget.x = nx * -28; bgTarget.y = ny * -18
+      fgTarget.x = nx *  22; fgTarget.y = ny *  16
+      startLoop()
     }
     const onLeave = () => {
-      bgTarget.current = { x: 0, y: 0 }
-      fgTarget.current = { x: 0, y: 0 }
+      bgTarget.x = 0; bgTarget.y = 0
+      fgTarget.x = 0; fgTarget.y = 0
+      startLoop()
     }
 
     window.addEventListener('mousemove', onMove)
@@ -163,8 +167,9 @@ function Hero() {
 
       {/* Background image — counter-parallax (moves opposite, feels distant) */}
       <div
+        ref={bgRef}
         className="absolute -z-10 pointer-events-none"
-        style={{ inset: '-24px', transform: `translate(${bg.x}px, ${bg.y}px)` }}
+        style={{ inset: '-24px' }}
       >
         <img
           src={HERO_BG_URL}
@@ -178,13 +183,14 @@ function Hero() {
 
       {/* Hero Visual — portal + ship, foreground parallax (moves with cursor) */}
       <div
+        ref={fgRef}
         className="absolute z-[2]"
         style={{
           top: '50%',
           left: '50%',
           height: isMobile ? '75vh' : '85vh',
           width: isMobile ? '75vh' : 'calc(85vh * 816 / 733)',
-          transform: `translate(calc(-50% + ${fg.x}px), calc(-50% + ${fg.y}px))`,
+          transform: 'translate(-50%, -50%)',
         }}
       >
         {/* Ship image */}
@@ -267,25 +273,7 @@ function SteamWishlistButton() {
       className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-3.5 pl-1 bg-black/25 isolate btn-press"
       onClick={() => haptic.trigger('medium')}
     >
-      <PulsingBorder
-        className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0"
-        aspectRatio="auto"
-        speed={1}
-        scale={0.60}
-        roundness={1}
-        softness={0.75}
-        rotation={0}
-        thickness={0.05}
-        intensity={0.20}
-        bloom={0.25}
-        spots={5}
-        spotSize={0.50}
-        pulse={0.25}
-        smoke={0.30}
-        smokeSize={0.60}
-        colors={['#5B00FF', '#AC00BF', '#0DC1FD']}
-        colorBack="#00000000"
-      />
+      <PulsingBorder className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0" {...PULSING_BORDER_PROPS} />
       <HeatmapSteamIcon />
       <span className="font-semibold text-base tracking-[-0.02em] text-white leading-5">
         {t.wishlistOnSteam}
@@ -302,13 +290,13 @@ function Story() {
   const { t } = useLang()
   return (
     <section id="section-story" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center max-w-[640px]">
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center max-w-[640px]">
         <SplitWords staggerStart={0}>{t.storyEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 3 }}>
         {t.storyTitle}
       </h2>
-      <p className="animate-enter text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-[#8A95B0] text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
+      <p className="animate-enter text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
         {t.storyText}
       </p>
     </section>
@@ -331,7 +319,7 @@ function getFeatures(t) {
 function FeatureCard({ video, title, desc, reverse }) {
   const cardRef = useReveal(0.25)
   const tiltRef = useRef(null)
-  const [canHover] = useState(() => window.matchMedia('(hover: hover)').matches)
+  const canHover = useRef(typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches).current
 
   const handleMouseMove = (e) => {
     if (!canHover) return
@@ -384,7 +372,7 @@ function FeatureCard({ video, title, desc, reverse }) {
         <h3 className="animate-enter font-heading font-bold text-[24px] md:text-[32px] leading-[1.1] tracking-[-0.02em] text-white" style={{ '--stagger': 1 }}>
           {title}
         </h3>
-        <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0]" style={{ '--stagger': 2 }}>{desc}</p>
+        <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-muted" style={{ '--stagger': 2 }}>{desc}</p>
       </div>
     </div>
   )
@@ -396,7 +384,7 @@ function Features() {
   const features = getFeatures(t)
   return (
     <section id="section-features" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
         <SplitWords staggerStart={0}>{t.featuresEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
@@ -419,7 +407,7 @@ function Trailer() {
   const { t } = useLang()
   return (
     <section id="section-trailer" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
         <SplitWords staggerStart={0}>{t.trailerEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[32px] md:text-[56px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
@@ -498,13 +486,13 @@ function EmailSignup() {
 
   return (
     <section id="section-email" ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
         <SplitWords staggerStart={0}>{t.emailEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 4 }}>
         {t.emailTitle}
       </h2>
-      <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
+      <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
         {t.emailText}
       </p>
 
@@ -518,7 +506,7 @@ function EmailSignup() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] text-white placeholder:text-[#8A95B0] text-base focus:outline-none input-glow"
+            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] text-white placeholder:text-muted text-base focus:outline-none input-glow"
             style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08), 0 1px 2px 0 rgba(0,0,0,0.2)' }}
           />
           <button
@@ -527,25 +515,7 @@ function EmailSignup() {
             className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-5 pl-5 bg-black/25 isolate shrink-0 btn-press"
             onClick={(e) => { if (!e.currentTarget.closest('form').checkValidity()) haptic.trigger('error') }}
           >
-            <PulsingBorder
-              className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0"
-              aspectRatio="auto"
-              speed={1}
-              scale={0.60}
-              roundness={1}
-              softness={0.75}
-              rotation={0}
-              thickness={0.05}
-              intensity={0.20}
-              bloom={0.25}
-              spots={5}
-              spotSize={0.50}
-              pulse={0.25}
-              smoke={0.30}
-              smokeSize={0.60}
-              colors={['#5B00FF', '#AC00BF', '#0DC1FD']}
-              colorBack="#00000000"
-            />
+            <PulsingBorder className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0" {...PULSING_BORDER_PROPS} />
             <span className="font-semibold text-base tracking-[-0.02em] text-white leading-5 py-2.5">
               {status === 'loading' ? t.emailSending : t.emailButton}
             </span>
@@ -571,13 +541,13 @@ function CtaSection() {
   const { t } = useLang()
   return (
     <section id="section-cta" ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
-      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-[#8A95B0] text-center">
+      <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
         <SplitWords staggerStart={0}>{t.ctaEyebrow}</SplitWords>
       </p>
       <h2 className="animate-enter font-heading font-bold text-[28px] md:text-[44px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
         {t.ctaTitle}
       </h2>
-      <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-[#8A95B0] text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
+      <p className="animate-enter text-[15px] md:text-[17px] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
         {t.ctaText}
       </p>
       <div className="animate-enter mt-6" style={{ '--stagger': 5 }}>

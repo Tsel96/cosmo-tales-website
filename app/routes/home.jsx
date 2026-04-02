@@ -229,7 +229,7 @@ function Hero() {
 
       {/* Hero Text + CTA grouped together */}
       <div className="absolute bottom-[10vh] md:bottom-[12vh] left-0 right-0 flex flex-col items-center gap-6 md:gap-9 z-[15] px-5">
-        <h1 className="font-heading font-bold text-[34px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
+        <h1 className="font-heading font-bold text-[42px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
           {t.heroLine1}<br />{t.heroLine2}
         </h1>
         <SteamWishlistButton />

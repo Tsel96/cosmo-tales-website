@@ -427,7 +427,7 @@ export default function Privacy() {
 
       {/* Content */}
       <main className="px-5 md:px-12 pb-16 md:pb-[120px] max-w-[860px]">
-        <h1 className="font-heading font-bold text-[34px] leading-[1.1] tracking-[-0.02em] text-white">
+        <h1 className="font-heading font-bold text-[42px] leading-[1.1] tracking-[-0.02em] text-white">
           {t.title}
         </h1>
         <p className="text-[17px] leading-[26px] md:leading-[29px] text-muted mt-3">

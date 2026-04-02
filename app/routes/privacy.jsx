@@ -419,7 +419,7 @@ export default function Privacy() {
         </a>
         <a
           href={`/privacy?lang=${t.langSwitchParam}`}
-          className="text-[13px] md:text-[14px] font-semibold text-accent hover:text-white transition-colors"
+          className="text-[15px] font-semibold text-accent hover:text-white transition-colors"
         >
           {t.langSwitch}
         </a>
@@ -427,24 +427,24 @@ export default function Privacy() {
 
       {/* Content */}
       <main className="px-5 md:px-12 pb-16 md:pb-[120px] max-w-[860px]">
-        <h1 className="font-heading font-bold text-[32px] md:text-[48px] leading-[1.1] tracking-[-0.02em] text-white">
+        <h1 className="font-heading font-bold text-[42px] leading-[1.1] tracking-[-0.02em] text-white">
           {t.title}
         </h1>
-        <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted mt-3">
+        <p className="text-[17px] leading-[26px] md:leading-[29px] text-muted mt-3">
           {t.effective}
         </p>
 
         {/* Introduction */}
         <div className="flex flex-col gap-10 md:gap-12 mt-10 md:mt-14">
           <section>
-            <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-3 md:mb-4">
+            <h2 className="font-heading font-bold text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-3 md:mb-4">
               {t.intro.title}
             </h2>
-            <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted font-semibold mb-4">
+            <p className="text-[17px] leading-[26px] md:leading-[29px] text-muted font-semibold mb-4">
               {t.intro.greeting}
             </p>
             {t.intro.paragraphs.map((p, i) => (
-              <p key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted mb-4">
+              <p key={i} className="text-[17px] leading-[26px] md:leading-[29px] text-muted mb-4">
                 {p}
               </p>
             ))}
@@ -453,12 +453,12 @@ export default function Privacy() {
             </p>
             <ul className="flex flex-col gap-2 mb-4">
               {t.intro.keyPoints.map((point, i) => (
-                <li key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-accent">
+                <li key={i} className="text-[17px] leading-[26px] md:leading-[29px] text-muted pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-accent">
                   {point}
                 </li>
               ))}
             </ul>
-            <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted">
+            <p className="text-[17px] leading-[26px] md:leading-[29px] text-muted">
               {t.intro.contact}
             </p>
           </section>
@@ -466,21 +466,21 @@ export default function Privacy() {
           {/* Sections */}
           {t.sections.map((s) => (
             <section key={s.id}>
-              <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-3 md:mb-4">
+              <h2 className="font-heading font-bold text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-3 md:mb-4">
                 {s.title}
               </h2>
               {s.subsections?.map((sub, i) => (
                 <div key={i} className="mb-4">
-                  <h3 className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-white/60 font-semibold mb-1">
+                  <h3 className="text-[17px] leading-[26px] md:leading-[29px] text-white/60 font-semibold mb-1">
                     {sub.subtitle}
                   </h3>
-                  <p className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted">
+                  <p className="text-[17px] leading-[26px] md:leading-[29px] text-muted">
                     {sub.text}
                   </p>
                 </div>
               ))}
               {s.items?.map((item, i) => (
-                <p key={i} className="text-[15px] md:text-[17px] leading-[26px] md:leading-[29px] text-muted whitespace-pre-line mb-3 last:mb-0">
+                <p key={i} className="text-[17px] leading-[26px] md:leading-[29px] text-muted whitespace-pre-line mb-3 last:mb-0">
                   {item}
                 </p>
               ))}
@@ -489,7 +489,7 @@ export default function Privacy() {
 
           {/* Appendix 1 */}
           <section>
-            <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
+            <h2 className="font-heading font-bold text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
               {t.appendix1.title}
             </h2>
             <DataTable headers={t.appendix1.headers} rows={t.appendix1.rows} />
@@ -497,7 +497,7 @@ export default function Privacy() {
 
           {/* Appendix 2 */}
           <section>
-            <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
+            <h2 className="font-heading font-bold text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
               {t.appendix2.title}
             </h2>
             <PartnerCards headers={t.appendix2.headers} rows={t.appendix2.rows} />
@@ -505,7 +505,7 @@ export default function Privacy() {
 
           {/* Affiliates */}
           <section>
-            <h2 className="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
+            <h2 className="font-heading font-bold text-[24px] leading-[1.2] tracking-[-0.01em] text-white mb-4 md:mb-6">
               {t.affiliates.title}
             </h2>
             <PartnerCards headers={t.affiliates.headers} rows={t.affiliates.rows} />

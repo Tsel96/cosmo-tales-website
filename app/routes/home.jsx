@@ -229,7 +229,7 @@ function Hero() {
 
       {/* Hero Text + CTA grouped together */}
       <div className="absolute bottom-[10vh] md:bottom-[12vh] left-0 right-0 flex flex-col items-center gap-6 md:gap-9 z-[15] px-5">
-        <h1 className="font-heading font-bold text-[42px] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
+        <h1 className="font-heading font-bold text-[42pt] leading-[1] tracking-[-0.02em] text-white text-center max-w-[484px] md:max-w-[720px]">
           {t.heroLine1}<br />{t.heroLine2}
         </h1>
         <SteamWishlistButton />
@@ -254,7 +254,7 @@ function LangSwitch() {
   return (
     <button
       onClick={() => { haptic.trigger('selection'); setLang(lang === 'cs' ? 'en' : 'cs') }}
-      className="text-[15px] leading-5 text-white cursor-pointer link-reveal opacity-100 hover:opacity-60 transition-opacity"
+      className="text-[15pt] leading-5 text-white cursor-pointer link-reveal opacity-100 hover:opacity-60 transition-opacity"
     >
       {t.langSwitch}
     </button>
@@ -293,10 +293,10 @@ function Story() {
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center max-w-[640px]">
         <SplitWords staggerStart={0}>{t.storyEyebrow}</SplitWords>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 3 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 3 }}>
         {t.storyTitle}
       </h2>
-      <p className="animate-enter text-[17px] leading-[26px] md:leading-[29px] text-muted text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
+      <p className="animate-enter text-[17pt] leading-[26px] md:leading-[29px] text-muted text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
         {t.storyText}
       </p>
     </section>
@@ -369,10 +369,10 @@ function FeatureCard({ video, title, desc, reverse }) {
       </div>
       {/* Text */}
       <div className="flex flex-col gap-2 md:gap-4 w-full md:w-[280px] md:shrink-0">
-        <h3 className="animate-enter font-heading font-bold text-[34px] leading-[1.1] tracking-[-0.02em] text-white" style={{ '--stagger': 1 }}>
+        <h3 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] tracking-[-0.02em] text-white" style={{ '--stagger': 1 }}>
           {title}
         </h3>
-        <p className="animate-enter text-[17px] leading-[24px] md:leading-[29px] text-muted" style={{ '--stagger': 2 }}>{desc}</p>
+        <p className="animate-enter text-[17pt] leading-[24px] md:leading-[29px] text-muted" style={{ '--stagger': 2 }}>{desc}</p>
       </div>
     </div>
   )
@@ -387,7 +387,7 @@ function Features() {
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
         <SplitWords staggerStart={0}>{t.featuresEyebrow}</SplitWords>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
         {t.featuresTitle}
       </h2>
       <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
@@ -410,7 +410,7 @@ function Trailer() {
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
         <SplitWords staggerStart={0}>{t.trailerEyebrow}</SplitWords>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34px] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
         {t.trailerTitle}
       </h2>
       <div className="animate-enter w-full max-w-[1080px] pt-6 md:pt-12" style={{ '--stagger': 4 }}>
@@ -489,10 +489,10 @@ function EmailSignup() {
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
         <SplitWords staggerStart={0}>{t.emailEyebrow}</SplitWords>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 4 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 4 }}>
         {t.emailTitle}
       </h2>
-      <p className="animate-enter text-[17px] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
+      <p className="animate-enter text-[17pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
         {t.emailText}
       </p>
 
@@ -544,10 +544,10 @@ function CtaSection() {
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
         <SplitWords staggerStart={0}>{t.ctaEyebrow}</SplitWords>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34px] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
         {t.ctaTitle}
       </h2>
-      <p className="animate-enter text-[17px] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
+      <p className="animate-enter text-[17pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
         {t.ctaText}
       </p>
       <div className="animate-enter mt-6" style={{ '--stagger': 5 }}>
@@ -578,7 +578,7 @@ function Footer() {
             href={href}
             target={href.startsWith('http') || newTab ? '_blank' : undefined}
             rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
-            className="inline-flex items-center gap-0.5 text-[15px] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
+            className="inline-flex items-center gap-0.5 text-[15pt] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
             onClick={() => haptic.trigger('light')}
           >
             {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}

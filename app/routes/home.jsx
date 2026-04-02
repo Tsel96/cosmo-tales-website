@@ -270,7 +270,7 @@ function SteamWishlistButton() {
       href={STEAM_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-3.5 pl-1 bg-black/25 isolate btn-press"
+      className="relative flex items-center gap-2.5 rounded-full py-1.5 pr-4 pl-1.5 bg-black/25 isolate btn-press"
       onClick={() => haptic.trigger('medium')}
     >
       <PulsingBorder className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0" {...PULSING_BORDER_PROPS} />
@@ -506,17 +506,17 @@ function EmailSignup() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full md:w-[260px] rounded-full px-6 py-[9px] bg-white/[0.06] text-white placeholder:text-muted text-[14pt] focus:outline-none input-glow"
+            className="w-full md:w-[260px] rounded-full px-6 py-2.5 bg-white/[0.06] text-white placeholder:text-muted text-[14pt] focus:outline-none input-glow"
             style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08), 0 1px 2px 0 rgba(0,0,0,0.2)' }}
           />
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="relative flex items-center gap-2.5 rounded-full py-0.5 pr-5 pl-5 bg-black/25 isolate shrink-0 btn-press"
+            className="relative flex items-center gap-2.5 rounded-full py-2.5 pr-6 pl-6 bg-black/25 isolate shrink-0 btn-press"
             onClick={(e) => { if (!e.currentTarget.closest('form').checkValidity()) haptic.trigger('error') }}
           >
             <PulsingBorder className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0" {...PULSING_BORDER_PROPS} />
-            <span className="font-semibold text-[14pt] tracking-[-0.02em] text-white leading-5 py-2.5">
+            <span className="font-semibold text-[14pt] tracking-[-0.02em] text-white leading-5">
               {status === 'loading' ? t.emailSending : t.emailButton}
             </span>
           </button>

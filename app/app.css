@@ -11,10 +11,9 @@
   --color-visited: #9083C4;
 }
 
-/* Sway Variable — Black weight, max contrast, uppercase */
+/* Sway Variable — Black weight, max contrast */
 .font-heading {
   font-variation-settings: 'CNST' 100, 'wght' 900;
-  text-transform: uppercase;
 }
 
 @keyframes levitate {

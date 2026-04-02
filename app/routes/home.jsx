@@ -602,7 +602,6 @@ function Footer() {
           { label: 'X / Twitter', href: 'https://x.com/CosmoTalesGame' },
           { label: 'Facebook', href: 'https://www.facebook.com/cosmotalesgame' },
           { label: 'Instagram', href: 'https://www.instagram.com/cosmotalesgame/' },
-          { label: t.privacyPolicy, href: '/privacy', newTab: true },
         ].map(({ label, href, newTab }) => (
           <a
             key={href}
@@ -615,7 +614,15 @@ function Footer() {
             {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
           </a>
         ))}
-        <span className="md:ml-auto"><LangSwitch /></span>
+        <a
+          href="/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-0.5 text-[13px] leading-4 text-white visited:text-[var(--color-visited)] transition-colors link-reveal md:ml-auto"
+          onClick={() => haptic.trigger('light')}
+        >
+          {t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" />
+        </a>
       </div>
       {/* Bottom row: copyright left · logos right */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4 md:gap-6">
@@ -1028,7 +1035,7 @@ export default function Home() {
           }}
         />
         {/* Content row */}
-        <div className="relative flex items-start justify-between pt-5 pb-5 pl-5 pr-1.5 pointer-events-auto">
+        <div className="relative flex items-start justify-between pt-5 pb-5 pl-5 pr-3 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
           <div className="relative">
             <div

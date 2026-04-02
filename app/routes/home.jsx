@@ -1028,9 +1028,9 @@ export default function Home() {
           }}
         />
         {/* Content row */}
-        <div className="relative flex items-start justify-between pt-5 pl-5 pr-3 pointer-events-auto">
+        <div className="relative flex items-start justify-between pt-5 pb-5 pl-5 pr-1.5 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
-          <div className="flex items-center gap-4">
+          <div className="relative">
             <div
               style={{
                 opacity: pastHero ? 1 : 0,
@@ -1043,6 +1043,7 @@ export default function Home() {
               <SteamWishlistButton />
             </div>
             <div
+              className="absolute top-0 right-0"
               style={{
                 opacity: pastHero ? 0 : 1,
                 transition: 'opacity 500ms var(--ease-spring)',

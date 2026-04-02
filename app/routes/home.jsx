@@ -622,7 +622,7 @@ function Footer() {
         <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white max-w-[480px]">
           &copy; 2026 BOHEMIA INTERACTIVE a.s. Cosmo Tales&reg; and BOHEMIA INTERACTIVE&reg; are registered trademarks of BOHEMIA INTERACTIVE a.s. All rights reserved.
         </p>
-        <div className="flex items-center gap-5 shrink-0">
+        <div className="flex items-center gap-8 shrink-0">
           <a href={STEAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => haptic.trigger('light')}>
             <img src="/SteamLogo.svg" alt="Steam" className="h-7 md:h-8 w-auto opacity-100 hover:opacity-60 transition-opacity" />
           </a>

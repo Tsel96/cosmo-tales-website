@@ -9,6 +9,7 @@ import {
 } from "react-router";
 import { Agentation } from "agentation";
 import { LangProvider } from "./i18n";
+import useLenis from "./hooks/useLenis";
 import "./app.css";
 
 export const links = () => [
@@ -67,6 +68,7 @@ export function HydrateFallback() {
 }
 
 export default function App() {
+  useLenis();
   return (
     <LangProvider>
       <Outlet />

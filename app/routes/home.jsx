@@ -3,6 +3,8 @@ import { PulsingBorder } from '@paper-design/shaders-react'
 import { useLang } from '../i18n'
 import { CosmoLogo } from '../CosmoLogo'
 import { useWebHaptics } from 'web-haptics/react'
+import useScrollReveal from '../hooks/useScrollReveal'
+import useMagnetic from '../hooks/useMagnetic'
 
 /* ─── Returns true once element has scrolled fully out of viewport ─── */
 function useScrolledPast() {
@@ -21,44 +23,6 @@ function useScrolledPast() {
   return [ref, isPast]
 }
 
-/* ─── Scroll-triggered reveal: adds .visible to all .animate-enter children ─── */
-function useReveal(threshold = 0.35) {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const targets = el.querySelectorAll('.animate-enter')
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          targets.forEach((t) => t.classList.add('visible'))
-          observer.disconnect()
-        }
-      },
-      { threshold }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return ref
-}
-
-/* ─── Split text into individually animated word spans ─── */
-function SplitWords({ children, className = '', staggerStart = 1 }) {
-  const words = String(children).split(/\s+/)
-  return words.map((word, i) => (
-    <span
-      key={`${word}-${i}`}
-      className={`inline-block animate-enter ${className}`}
-      style={{ '--stagger': staggerStart + i }}
-    >
-      {word}{i < words.length - 1 ? '\u00A0' : ''}
-    </span>
-  ))
-}
 
 /* ─── Route meta ─── */
 export function meta() {
@@ -265,8 +229,10 @@ function LangSwitch() {
 function SteamWishlistButton() {
   const { t } = useLang()
   const haptic = useWebHaptics()
+  const magnetRef = useMagnetic(0.25)
   return (
     <a
+      ref={magnetRef}
       href={STEAM_URL}
       target="_blank"
       rel="noopener noreferrer"
@@ -286,17 +252,17 @@ function SteamWishlistButton() {
    STORY SECTION
    ═══════════════════════════════════════════ */
 function Story() {
-  const ref = useReveal()
+  const ref = useScrollReveal()
   const { t } = useLang()
   return (
-    <section id="section-story" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4" style={{ '--delay': '80ms' }}>
+    <section id="section-story" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[120px] gap-4">
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center max-w-[640px]">
-        <SplitWords staggerStart={0}>{t.storyEyebrow}</SplitWords>
+        <span className="animate-enter">{t.storyEyebrow}</span>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]" style={{ '--stagger': 3 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center max-w-[640px]">
         {t.storyTitle}
       </h2>
-      <p className="animate-enter text-[14pt] leading-[26px] md:leading-[29px] text-muted text-center max-w-[560px] pt-1" style={{ '--stagger': 4 }}>
+      <p className="animate-enter text-[14pt] leading-[26px] md:leading-[29px] text-muted text-center max-w-[560px] pt-1">
         {t.storyText}
       </p>
     </section>
@@ -317,7 +283,7 @@ function getFeatures(t) {
 }
 
 function FeatureCard({ video, title, desc, reverse }) {
-  const cardRef = useReveal(0.25)
+  const cardRef = useScrollReveal({ threshold: 0.25 })
   const tiltRef = useRef(null)
   const canHover = useRef(typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches).current
 
@@ -339,11 +305,11 @@ function FeatureCard({ video, title, desc, reverse }) {
   }
 
   return (
-    <div ref={cardRef} className={`flex flex-col md:flex-row md:items-center w-full max-w-[1200px] gap-4 md:gap-12 ${reverse ? 'md:flex-row-reverse' : ''}`} style={{ '--delay': '80ms' }}>
+    <div ref={cardRef} className={`flex flex-col md:flex-row md:items-center w-full max-w-[1200px] gap-4 md:gap-12 ${reverse ? 'md:flex-row-reverse' : ''}`}>
       {/* Video — trigger parent stays flat, child tilts (Rule #1: anti-flicker) */}
       <div
         className="animate-enter relative w-full md:flex-[3] min-w-0"
-        style={{ '--stagger': 0 }}
+       
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
@@ -369,25 +335,25 @@ function FeatureCard({ video, title, desc, reverse }) {
       </div>
       {/* Text */}
       <div className="flex flex-col gap-2 md:gap-4 w-full md:w-[280px] md:shrink-0">
-        <h3 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] tracking-[-0.02em] text-white" style={{ '--stagger': 1 }}>
+        <h3 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] tracking-[-0.02em] text-white">
           {title}
         </h3>
-        <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted" style={{ '--stagger': 2 }}>{desc}</p>
+        <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted">{desc}</p>
       </div>
     </div>
   )
 }
 
 function Features() {
-  const ref = useReveal()
+  const ref = useScrollReveal()
   const { t } = useLang()
   const features = getFeatures(t)
   return (
-    <section id="section-features" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
+    <section id="section-features" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pt-10 pb-16 md:pb-[120px] gap-4">
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
-        <SplitWords staggerStart={0}>{t.featuresEyebrow}</SplitWords>
+        <span className="animate-enter">{t.featuresEyebrow}</span>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         {t.featuresTitle}
       </h2>
       <div className="flex flex-col w-full items-center pt-8 md:pt-16 gap-10 md:gap-12">
@@ -403,17 +369,17 @@ function Features() {
    TRAILER SECTION
    ═══════════════════════════════════════════ */
 function Trailer() {
-  const ref = useReveal()
+  const ref = useScrollReveal()
   const { t } = useLang()
   return (
-    <section id="section-trailer" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4" style={{ '--delay': '80ms' }}>
+    <section id="section-trailer" ref={ref} className="flex flex-col items-center w-full px-5 md:px-12 pb-16 md:pb-[120px] gap-4">
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
-        <SplitWords staggerStart={0}>{t.trailerEyebrow}</SplitWords>
+        <span className="animate-enter">{t.trailerEyebrow}</span>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.05] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         {t.trailerTitle}
       </h2>
-      <div className="animate-enter w-full max-w-[1080px] pt-6 md:pt-12" style={{ '--stagger': 4 }}>
+      <div className="animate-enter w-full max-w-[1080px] pt-6 md:pt-12">
         {/* filter wrapper — drop-shadow respects clip-path shape for outline + glow */}
         <div style={{
           filter: [
@@ -445,7 +411,7 @@ function Trailer() {
    EMAIL SIGNUP SECTION
    ═══════════════════════════════════════════ */
 function EmailSignup() {
-  const fadeRef = useReveal()
+  const fadeRef = useScrollReveal()
   const { t } = useLang()
   const haptic = useWebHaptics()
   const [email, setEmail] = useState('')
@@ -485,21 +451,21 @@ function EmailSignup() {
   }
 
   return (
-    <section id="section-email" ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
+    <section id="section-email" ref={fadeRef} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate">
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
-        <SplitWords staggerStart={0}>{t.emailEyebrow}</SplitWords>
+        <span className="animate-enter">{t.emailEyebrow}</span>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 4 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         {t.emailTitle}
       </h2>
-      <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 5 }}>
+      <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1">
         {t.emailText}
       </p>
 
       {status === 'success' ? (
-        <p className="animate-enter text-accent text-base mt-6 font-medium" style={{ '--stagger': 6 }}>{message}</p>
+        <p className="animate-enter text-accent text-base mt-6 font-medium">{message}</p>
       ) : (
-        <form onSubmit={handleSubmit} className="animate-enter flex flex-col md:flex-row items-center mt-8 gap-3 w-full md:w-auto" style={{ '--stagger': 6 }}>
+        <form onSubmit={handleSubmit} className="animate-enter flex flex-col md:flex-row items-center mt-8 gap-3 w-full md:w-auto">
           <input
             type="email"
             placeholder={t.emailPlaceholder}
@@ -525,7 +491,7 @@ function EmailSignup() {
       {status === 'error' && (
         <p className="text-red-400 text-sm mt-2">{message}</p>
       )}
-      <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1" style={{ '--stagger': 7 }}>
+      <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1">
         {t.emailPrivacy}{' '}
         <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">{t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" /></a>
       </p>
@@ -537,20 +503,20 @@ function EmailSignup() {
    STEAM WISHLIST SECTION
    ═══════════════════════════════════════════ */
 function CtaSection() {
-  const ref = useReveal()
+  const ref = useScrollReveal()
   const { t } = useLang()
   return (
-    <section id="section-cta" ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate" style={{ '--delay': '80ms' }}>
+    <section id="section-cta" ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate">
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
-        <SplitWords staggerStart={0}>{t.ctaEyebrow}</SplitWords>
+        <span className="animate-enter">{t.ctaEyebrow}</span>
       </p>
-      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center" style={{ '--stagger': 3 }}>
+      <h2 className="animate-enter font-heading font-bold text-[34pt] leading-[1.1] md:leading-[50px] tracking-[-0.02em] text-white text-center">
         {t.ctaTitle}
       </h2>
-      <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1" style={{ '--stagger': 4 }}>
+      <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1">
         {t.ctaText}
       </p>
-      <div className="animate-enter mt-6" style={{ '--stagger': 5 }}>
+      <div className="animate-enter mt-6">
         <SteamWishlistButton />
       </div>
     </section>

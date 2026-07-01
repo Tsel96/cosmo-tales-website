@@ -1,7 +1,7 @@
 // Sets _detected_lang cookie before HTML is served so React reads the correct
 // language synchronously on first render (no Czech→English flash for CZ visitors).
 // Also adds security headers to all responses.
-export const config = { matcher: '/' }
+export const config = { matcher: ['/', '/privacy', '/api/:path*'] }
 
 const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
@@ -11,12 +11,16 @@ const SECURITY_HEADERS = {
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    // 'unsafe-eval' removed — none of our deps (GSAP, Lenis, paper shaders) need it.
+    // 'unsafe-inline' is still required for script-src (RR/Vite hydration) and
+    // style-src (inline style={{}} used throughout home.jsx).
+    "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://use.typekit.net",
     "font-src 'self' https://fonts.gstatic.com https://use.typekit.net",
     "img-src 'self' data: https://workers.paper.design https://store.steampowered.com",
     "frame-src https://www.youtube-nocookie.com",
     "connect-src 'self' https://*.api.mailchimp.com",
+    "frame-ancestors 'none'",
   ].join('; '),
 }
 

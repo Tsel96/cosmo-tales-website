@@ -13,31 +13,44 @@ export default function useScrollReveal({ threshold = 0.15, stagger = 0.08 } = {
     const targets = el.querySelectorAll('.animate-enter')
     if (!targets.length) return
 
-    gsap.set(targets, {
-      y: 8,
-      opacity: 0,
-      filter: 'blur(5px)',
-    })
+    // Respect reduced-motion: skip the hide/reveal choreography entirely.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.set(targets, { y: 0, opacity: 1, filter: 'blur(0px)' })
+      return
+    }
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: `top ${100 - threshold * 100}%`,
-        once: true,
-      },
-    })
+    let tl
+    try {
+      gsap.set(targets, {
+        y: 8,
+        opacity: 0,
+        filter: 'blur(5px)',
+      })
 
-    tl.to(targets, {
-      y: 0,
-      opacity: 1,
-      filter: 'blur(0px)',
-      duration: 0.5,
-      ease: 'power2.out',
-      stagger: stagger,
-    })
+      tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: `top ${100 - threshold * 100}%`,
+          once: true,
+        },
+      })
+
+      tl.to(targets, {
+        y: 0,
+        opacity: 1,
+        filter: 'blur(0px)',
+        duration: 0.5,
+        ease: 'power2.out',
+        stagger: stagger,
+      })
+    } catch (err) {
+      // If GSAP/ScrollTrigger fails for any reason, never leave content stuck invisible.
+      console.error('useScrollReveal failed, falling back to visible content:', err)
+      gsap.set(targets, { y: 0, opacity: 1, filter: 'blur(0px)' })
+    }
 
     return () => {
-      tl.kill()
+      tl?.kill()
       ScrollTrigger.getAll().forEach((t) => {
         if (t.trigger === el) t.kill()
       })

@@ -7,6 +7,7 @@ export default function useMagnetic(strength = 0.3) {
     const el = ref.current
     if (!el) return
     if (!window.matchMedia?.('(hover: hover)').matches) return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
 
     const onMove = (e) => {
       const rect = el.getBoundingClientRect()

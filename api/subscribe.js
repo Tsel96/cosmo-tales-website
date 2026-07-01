@@ -67,7 +67,9 @@ export default async function handler(req, res) {
   }
 
   // ── Rate limiting ──
-  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown'
+  // x-real-ip is set by Vercel's edge and can't be spoofed by the client;
+  // x-forwarded-for is only a fallback for environments where it's absent.
+  const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown'
   if (isRateLimited(ip)) {
     return res.status(429).json({ error: 'Too many requests. Please try again later.' })
   }

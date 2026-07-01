@@ -12,16 +12,23 @@ export default defineConfig([
       reactHooks.configs.flat.recommended,
     ],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      ecmaVersion: 'latest',
+      // process.env.NODE_ENV is statically replaced by Vite at build time,
+      // even in browser-run code (e.g. root.jsx) — allow the global.
+      globals: { ...globals.browser, process: 'readonly' },
       parserOptions: {
-        ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
       },
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+  {
+    files: ['api/**/*.js', 'middleware.js'],
+    languageOptions: {
+      globals: globals.node,
     },
   },
 ])

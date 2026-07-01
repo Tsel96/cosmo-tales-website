@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router'
 
 const LOGO_URL = '/CosmoLogo.svg'
@@ -8,6 +9,8 @@ export function meta() {
     { name: "description", content: "Privacy policy for Cosmo Tales by Bohemia Interactive." },
   ];
 }
+
+const SKIP_LABEL = { en: 'Skip to content', cs: 'Přeskočit na obsah' }
 
 /* ─── Content ─── */
 
@@ -390,7 +393,7 @@ function PartnerCards({ headers, rows }) {
           </p>
           {row.slice(1).map((cell, j) => (
             <div key={j}>
-              <p className="text-[11px] md:text-[12px] text-white/30 uppercase tracking-wider font-semibold mb-0.5">
+              <p className="text-[11px] md:text-[12px] text-muted uppercase tracking-wider font-semibold mb-0.5">
                 {headers[j + 1]}
               </p>
               <p className="text-[13px] md:text-[14px] leading-[20px] text-muted">
@@ -410,10 +413,16 @@ export default function Privacy() {
   const lang = searchParams.get('lang') === 'cs' ? 'cs' : 'en'
   const t = CONTENT[lang]
 
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
+
   return (
     <div className="relative min-h-screen bg-space-900 overflow-x-hidden">
+      <a href="#main-content" className="skip-link">{SKIP_LABEL[lang]}</a>
+
       {/* Nav */}
-      <nav className="flex items-center justify-between px-5 md:px-12 pt-6 md:pt-12 pb-8 md:pb-16">
+      <nav aria-label="Primary" className="flex items-center justify-between px-5 md:px-12 pt-6 md:pt-12 pb-8 md:pb-16">
         <a href="/">
           <img src={LOGO_URL} alt="Cosmo Tales" className="h-[48px] md:h-[74px] w-auto" />
         </a>
@@ -426,7 +435,7 @@ export default function Privacy() {
       </nav>
 
       {/* Content */}
-      <main className="px-5 md:px-12 pb-16 md:pb-[120px] max-w-[860px]">
+      <main id="main-content" className="px-5 md:px-12 pb-16 md:pb-[120px] max-w-[860px]">
         <h1 className="font-heading font-bold text-[42pt] leading-[1.1] tracking-[-0.02em] text-white">
           {t.title}
         </h1>
@@ -519,7 +528,7 @@ export default function Privacy() {
           <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer">
             <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-6 md:h-7 w-auto opacity-60 hover:opacity-100 transition-opacity" />
           </a>
-          <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-white/25 md:text-right max-w-[480px]">
+          <p className="text-[10px] md:text-[11px] leading-4 md:leading-5 text-muted md:text-right max-w-[480px]">
             &copy; 2026 BOHEMIA INTERACTIVE a.s. Cosmo Tales&reg; and BOHEMIA INTERACTIVE&reg; are registered trademarks of BOHEMIA INTERACTIVE a.s. All rights reserved.
           </p>
         </div>

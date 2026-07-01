@@ -1,16 +1,39 @@
-# React + Vite
+# Cosmo Tales — Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Marketing website for **Cosmo Tales**, a retro-futuristic space game by Bohemia Interactive.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [React 19](https://react.dev) + [React Router v7](https://reactrouter.com) (SPA mode, `ssr: false`)
+- [Vite 7](https://vite.dev) for dev/build tooling
+- [Tailwind CSS v4](https://tailwindcss.com) (config-less, CSS-first `@theme`)
+- [GSAP](https://gsap.com) + ScrollTrigger, [Lenis](https://lenis.darkroom.engineering) for scroll animation
+- Deployed on [Vercel](https://vercel.com) — a static SPA plus one Edge Middleware and one serverless function
 
-## React Compiler
+## Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```
+app/
+  root.jsx              Document shell, fonts, error boundary
+  routes.js             Route manifest
+  routes/home.jsx        Marketing page (hero, features, email signup, footer)
+  routes/privacy.jsx      Bilingual (EN/CS) privacy policy
+  i18n.jsx              Language context + translations
+  hooks/                 Smooth scroll, scroll reveal, magnetic buttons, in-view detection
+  app.css               Global styles, design tokens, reduced-motion handling
+api/subscribe.js         Mailchimp signup proxy (rate-limited, CSRF-checked)
+middleware.js            Security headers, CSP, geo language detection
+```
 
-## Expanding the ESLint configuration
+## Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```sh
+npm install
+npm run dev      # start dev server on :5173
+npm run build    # production build
+npm run lint     # eslint
+```
+
+## Environment variables
+
+See `.env.example` — `MAILCHIMP_API_KEY`, `MAILCHIMP_LIST_ID`, `FRONTEND_URL` (required by `api/subscribe.js` for CORS/CSRF and the Mailchimp integration).

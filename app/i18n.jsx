@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState, useEffect } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 const translations = {
   en: {
@@ -144,10 +144,9 @@ export function LangProvider({ children }) {
     return 'en'
   })
 
-  useEffect(() => {
-    document.documentElement.lang = lang
-    document.title = translations[lang].metaTitle
-  }, [lang])
+  // Document-level side effects (html lang, title, meta description) are owned by
+  // whichever route is mounted (see Home()'s own effect) — Privacy manages its own
+  // via its `?lang=` param, so LangProvider itself only tracks state.
 
   const setLang = useCallback((l) => {
     setLangState(l)

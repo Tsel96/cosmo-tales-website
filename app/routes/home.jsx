@@ -5,6 +5,7 @@ import { CosmoLogo } from '../CosmoLogo'
 import { useWebHaptics } from 'web-haptics/react'
 import useScrollReveal from '../hooks/useScrollReveal'
 import useMagnetic from '../hooks/useMagnetic'
+import useInView from '../hooks/useInView'
 
 /* ─── Returns true once element has scrolled fully out of viewport ─── */
 function useScrolledPast() {
@@ -62,17 +63,23 @@ function Hero() {
   const heroRef = useRef(null)
   const bgRef   = useRef(null)
   const fgRef   = useRef(null)
-  const isMobileRef = useRef(typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches)
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches)
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)')
-    const onChange = (e) => { isMobileRef.current = e.matches; setIsMobile(e.matches) }
+    const onChange = (e) => setIsMobile(e.matches)
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
   }, [])
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    // Skip the getBoundingClientRect read on every mousemove once the hero has scrolled off-screen.
+    let heroVisible = true
+    const heroObs = new IntersectionObserver(([entry]) => { heroVisible = entry.isIntersecting })
+    if (heroRef.current) heroObs.observe(heroRef.current)
+
     const bgTarget  = { x: 0, y: 0 }, bgCur = { x: 0, y: 0 }
     const fgTarget  = { x: 0, y: 0 }, fgCur = { x: 0, y: 0 }
     const EPS = 0.05
@@ -97,7 +104,7 @@ function Hero() {
     const startLoop = () => { if (!running) { running = true; raf = requestAnimationFrame(tick) } }
 
     const onMove = (e) => {
-      if (!heroRef.current) return
+      if (!heroRef.current || !heroVisible) return
       const rect = heroRef.current.getBoundingClientRect()
       const nx = ((e.clientX - rect.left) / rect.width  - 0.5) * 2
       const ny = ((e.clientY - rect.top)  / rect.height - 0.5) * 2
@@ -115,6 +122,7 @@ function Hero() {
     document.addEventListener('mouseleave', onLeave)
     return () => {
       cancelAnimationFrame(raf)
+      heroObs.disconnect()
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseleave', onLeave)
     }
@@ -225,8 +233,10 @@ function LangSwitch() {
   )
 }
 
-/* ─── Shared Steam Wishlist Button (hero + CTA) ─── */
-function SteamWishlistButton() {
+/* ─── Shared Steam Wishlist Button (hero + navbar + CTA) ───
+   `active` gates the WebGL PulsingBorder shader so hidden/off-screen
+   instances (navbar pre-scroll, CTA below the fold) don't render it. */
+function SteamWishlistButton({ active = true }) {
   const { t } = useLang()
   const haptic = useWebHaptics()
   const magnetRef = useMagnetic(0.25)
@@ -239,11 +249,12 @@ function SteamWishlistButton() {
       className="relative flex items-center gap-2.5 rounded-full py-1.5 pr-4 pl-1.5 bg-black/25 isolate btn-press"
       onClick={() => haptic.trigger('medium')}
     >
-      <PulsingBorder className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0" {...PULSING_BORDER_PROPS} />
+      {active && <PulsingBorder className="absolute -top-4 -bottom-4 -left-16 -right-16 rounded-full z-0" {...PULSING_BORDER_PROPS} />}
       <HeatmapSteamIcon />
       <span className="font-semibold text-[14pt] tracking-[-0.02em] text-white leading-5">
         {t.wishlistOnSteam}
       </span>
+      <span className="sr-only"> (opens in new tab)</span>
     </a>
   )
 }
@@ -285,10 +296,12 @@ function getFeatures(t) {
 function FeatureCard({ video, title, desc, reverse }) {
   const cardRef = useScrollReveal({ threshold: 0.25 })
   const tiltRef = useRef(null)
+  const [videoWrapRef, videoInView] = useInView({ rootMargin: '300px' })
   const canHover = useRef(typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches).current
+  const reducedMotion = useRef(typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches).current
 
   const handleMouseMove = (e) => {
-    if (!canHover) return
+    if (!canHover || reducedMotion) return
     const el = tiltRef.current
     const rect = el.getBoundingClientRect()
     const nx = (e.clientX - rect.left) / rect.width - 0.5
@@ -298,7 +311,7 @@ function FeatureCard({ video, title, desc, reverse }) {
   }
 
   const handleMouseLeave = () => {
-    if (!canHover) return
+    if (!canHover || reducedMotion) return
     const el = tiltRef.current
     el.style.transition = 'transform 280ms cubic-bezier(0.22, 1, 0.36, 1)'
     el.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)'
@@ -309,7 +322,6 @@ function FeatureCard({ video, title, desc, reverse }) {
       {/* Video — trigger parent stays flat, child tilts (Rule #1: anti-flicker) */}
       <div
         className="animate-enter relative w-full md:flex-[3] min-w-0"
-       
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
@@ -319,12 +331,15 @@ function FeatureCard({ video, title, desc, reverse }) {
           style={{ filter: 'drop-shadow(0 0 0.5px rgba(255,255,255,0.15)) drop-shadow(0 0 0.5px rgba(255,255,255,0.15))' }}
         >
           <div
+            ref={videoWrapRef}
             className="w-full overflow-hidden"
             style={{ clipPath: 'url(#videoMask)', aspectRatio: '1964 / 1119' }}
           >
+            {/* Deferred until near-viewport — avoids fetching all 3 feature videos on load */}
             <video
-              src={video}
-              autoPlay
+              src={videoInView ? video : undefined}
+              preload="none"
+              autoPlay={videoInView}
               muted
               loop
               playsInline
@@ -414,6 +429,7 @@ function EmailSignup() {
   const fadeRef = useScrollReveal()
   const { t } = useLang()
   const haptic = useWebHaptics()
+  const [btnRef, btnInView] = useInView({ rootMargin: '300px' })
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [message, setMessage] = useState('')
@@ -431,7 +447,8 @@ function EmailSignup() {
         signal: controller.signal,
       })
       clearTimeout(timeout)
-      const data = await res.json()
+      // A malformed/empty body on a 200 must still be treated as success.
+      const data = await res.json().catch(() => ({}))
       if (res.ok) {
         setStatus('success')
         setMessage(t.emailSuccess)
@@ -462,26 +479,36 @@ function EmailSignup() {
         {t.emailText}
       </p>
 
+      {/* Persistent live region: always mounted so status changes are reliably announced */}
+      <p role="status" aria-live="polite" className="sr-only">
+        {status === 'success' || status === 'error' ? message : ''}
+      </p>
+
       {status === 'success' ? (
         <p className="animate-enter text-accent text-base mt-6 font-medium">{message}</p>
       ) : (
         <form onSubmit={handleSubmit} className="animate-enter flex flex-col md:flex-row items-center mt-8 gap-3 w-full md:w-auto">
+          <label htmlFor="email-signup-input" className="sr-only">{t.emailPlaceholder}</label>
           <input
+            id="email-signup-input"
             type="email"
             placeholder={t.emailPlaceholder}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            aria-invalid={status === 'error'}
+            aria-describedby={status === 'error' ? 'email-signup-error' : undefined}
             className="w-full md:w-[260px] rounded-full px-6 py-2.5 bg-white/[0.06] text-white placeholder:text-muted text-[14pt] focus:outline-none input-glow"
             style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08), 0 1px 2px 0 rgba(0,0,0,0.2)' }}
           />
           <button
+            ref={btnRef}
             type="submit"
             disabled={status === 'loading'}
             className="relative flex items-center gap-2.5 rounded-full py-2.5 pr-6 pl-6 bg-black/25 isolate shrink-0 btn-press"
             onClick={(e) => { if (!e.currentTarget.closest('form').checkValidity()) haptic.trigger('error') }}
           >
-            <PulsingBorder className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0" {...PULSING_BORDER_PROPS} />
+            {btnInView && <PulsingBorder className="absolute -top-4 -bottom-4 -left-10 -right-10 rounded-full z-0" {...PULSING_BORDER_PROPS} />}
             <span className="font-semibold text-[14pt] tracking-[-0.02em] text-white leading-5">
               {status === 'loading' ? t.emailSending : t.emailButton}
             </span>
@@ -489,11 +516,11 @@ function EmailSignup() {
         </form>
       )}
       {status === 'error' && (
-        <p className="text-red-400 text-sm mt-2">{message}</p>
+        <p id="email-signup-error" className="text-red-400 text-sm mt-2">{message}</p>
       )}
-      <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-white/25 text-center max-w-[400px] mt-1">
+      <p className="animate-enter text-[12px] md:text-[13px] leading-4 text-muted text-center max-w-[400px] mt-1">
         {t.emailPrivacy}{' '}
-        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">{t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" /></a>
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal">{t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" /><span className="sr-only"> (opens in new tab)</span></a>
       </p>
     </section>
   )
@@ -505,6 +532,7 @@ function EmailSignup() {
 function CtaSection() {
   const ref = useScrollReveal()
   const { t } = useLang()
+  const [btnWrapRef, btnInView] = useInView({ rootMargin: '300px' })
   return (
     <section id="section-cta" ref={ref} className="relative flex flex-col items-center w-full px-5 md:px-12 py-16 md:py-[100px] gap-4 overflow-hidden isolate">
       <p className="text-[13px] md:text-[14px] leading-[22px] font-semibold tracking-[0.15em] uppercase text-muted text-center">
@@ -516,8 +544,8 @@ function CtaSection() {
       <p className="animate-enter text-[14pt] leading-[24px] md:leading-[29px] text-muted text-center max-w-[480px] pt-1">
         {t.ctaText}
       </p>
-      <div className="animate-enter mt-6">
-        <SteamWishlistButton />
+      <div ref={btnWrapRef} className="animate-enter mt-6">
+        <SteamWishlistButton active={btnInView} />
       </div>
     </section>
   )
@@ -538,16 +566,16 @@ function Footer() {
           { label: 'X / Twitter', href: 'https://x.com/CosmoTalesGame' },
           { label: 'Facebook', href: 'https://www.facebook.com/cosmotalesgame' },
           { label: 'Instagram', href: 'https://www.instagram.com/cosmotalesgame/' },
-        ].map(({ label, href, newTab }) => (
+        ].map(({ label, href }) => (
           <a
             key={href}
             href={href}
-            target={href.startsWith('http') || newTab ? '_blank' : undefined}
-            rel={href.startsWith('http') || newTab ? 'noopener noreferrer' : undefined}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-0.5 text-[12pt] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal"
             onClick={() => haptic.trigger('light')}
           >
-            {label}{(href.startsWith('http') || newTab) && <ExternalLinkIcon className="w-3.5 h-3.5" />}
+            {label}<ExternalLinkIcon className="w-3.5 h-3.5" /><span className="sr-only"> (opens in new tab)</span>
           </a>
         ))}
         <a
@@ -557,7 +585,7 @@ function Footer() {
           className="inline-flex items-center gap-0.5 text-[12pt] leading-5 text-white visited:text-[var(--color-visited)] transition-colors link-reveal md:ml-auto"
           onClick={() => haptic.trigger('light')}
         >
-          {t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" />
+          {t.privacyPolicy}<ExternalLinkIcon className="w-3.5 h-3.5" /><span className="sr-only"> (opens in new tab)</span>
         </a>
       </div>
       {/* Bottom row: copyright left · logos right */}
@@ -568,10 +596,10 @@ function Footer() {
         <div className="flex items-center gap-8 shrink-0">
           <img src="/CosmoLogo.svg" alt="Cosmo Tales" className="h-9 md:h-10 w-auto opacity-100" />
           <a href="https://www.bohemia.net" target="_blank" rel="noopener noreferrer" onClick={() => haptic.trigger('light')}>
-            <img src="/bi-logo-white.svg" alt="Bohemia Interactive" className="h-7 md:h-8 w-auto opacity-100 hover:opacity-60 transition-opacity" />
+            <img src="/bi-logo-white.svg" alt="Bohemia Interactive (opens in new tab)" className="h-7 md:h-8 w-auto opacity-100 hover:opacity-60 transition-opacity" />
           </a>
           <a href={STEAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => haptic.trigger('light')}>
-            <img src="/SteamLogo.svg" alt="Steam" className="h-6 md:h-7 w-auto opacity-100 hover:opacity-60 transition-opacity" />
+            <img src="/SteamLogo.svg" alt="Steam (opens in new tab)" className="h-6 md:h-7 w-auto opacity-100 hover:opacity-60 transition-opacity" />
           </a>
         </div>
       </div>
@@ -586,6 +614,8 @@ function StarField() {
   const canvasRef = useRef(null)
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
     const stars = []
@@ -883,7 +913,9 @@ function ScrollScrubber() {
   const labelVisible = active && (!isMobile || touching)
 
   return (
-    <div className="fixed right-0 inset-y-0 z-50 pointer-events-none">
+    // Decorative section-progress indicator — native scrolling remains fully
+    // functional and is the real way to navigate, so this is hidden from AT.
+    <div className="fixed right-0 inset-y-0 z-50 pointer-events-none" aria-hidden="true">
       <div
         ref={trackRef}
         className="absolute inset-y-2 right-0 w-6 pointer-events-auto"
@@ -950,9 +982,20 @@ function VideoMaskDefs() {
 
 export default function Home() {
   const [heroRef, pastHero] = useScrolledPast()
+  const { lang, t } = useLang()
+
+  // Owns document-level side effects for this route (html lang, title, meta
+  // description) — Privacy manages its own independently via `?lang=`.
+  useEffect(() => {
+    document.documentElement.lang = lang
+    document.title = t.metaTitle
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t.metaDesc)
+  }, [lang, t])
 
   return (
     <div className="relative min-h-screen bg-space-900 overflow-x-hidden">
+      <a href="#main-content" className="skip-link">Skip to content</a>
+
       <StarField />
       <VideoMaskDefs />
 
@@ -972,10 +1015,11 @@ export default function Home() {
           }}
         />
         {/* Content row */}
-        <div className="relative flex items-start justify-between p-5 pointer-events-auto">
+        <nav aria-label="Primary" className="relative flex items-start justify-between p-5 pointer-events-auto">
           <CosmoLogo className="h-[60px] md:h-[93px] 2xl:h-[155px] w-auto" />
           <div className="relative">
             <div
+              inert={!pastHero}
               style={{
                 opacity: pastHero ? 1 : 0,
                 transform: pastHero ? 'translateY(0)' : 'translateY(-8px)',
@@ -984,10 +1028,11 @@ export default function Home() {
                 pointerEvents: pastHero ? 'auto' : 'none',
               }}
             >
-              <SteamWishlistButton />
+              <SteamWishlistButton active={pastHero} />
             </div>
             <div
               className="absolute top-0 right-0"
+              inert={pastHero}
               style={{
                 opacity: pastHero ? 0 : 1,
                 transition: 'opacity 500ms var(--ease-spring)',
@@ -997,19 +1042,21 @@ export default function Home() {
               <LangSwitch />
             </div>
           </div>
-        </div>
+        </nav>
       </div>
 
       <ScrollScrubber />
 
-      <div ref={heroRef}>
-        <Hero />
-      </div>
-      <Story />
-      <Features />
-      <Trailer />
-      <EmailSignup />
-      <CtaSection />
+      <main id="main-content">
+        <div ref={heroRef}>
+          <Hero />
+        </div>
+        <Story />
+        <Features />
+        <Trailer />
+        <EmailSignup />
+        <CtaSection />
+      </main>
       <Footer />
     </div>
   )

@@ -3,7 +3,6 @@
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-heading: "sway-variable", sans-serif;
-  --font-eyebrow: "sway-variable", sans-serif;
   --color-space-950: #030712;
   --color-space-900: #050A1A;
   --color-space-800: #0A1128;
@@ -11,7 +10,6 @@
   --color-visited: #9083C4;
   --color-muted: #8A95B0;
   --color-text: #E8EDF5;
-  --color-text-muted: #8A95B0;
   --color-border: rgba(255, 255, 255, 0.06);
   --color-surface: rgba(255, 255, 255, 0.06);
   --color-surface-hover: rgba(255, 255, 255, 0.08);
@@ -30,7 +28,6 @@
 /* ─── Easing curves (animations.dev principles) ─── */
 :root {
   --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─── Button press: hover scale-up, active scale-down ─── */
@@ -117,7 +114,7 @@
   body {
     margin: 0;
     background-color: var(--color-space-900);
-    color: #E8EDF5;
+    color: var(--color-text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: 'ss07' on, 'ss08' on, 'cv01' on, 'cv03' on, 'cv04' on, 'cv05' on, 'cv08' on, 'cv09' on, 'cv10' on;
@@ -141,5 +138,37 @@
   }
   p {
     text-wrap: pretty;
+  }
+}
+
+/* ─── Skip link: hidden until keyboard-focused ─── */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  background: var(--color-space-900);
+  color: var(--color-text);
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 200ms var(--ease-spring);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ─── Respect reduced-motion preference: neutralize all animation/transition ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-enter {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }
